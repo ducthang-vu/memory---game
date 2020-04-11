@@ -89,7 +89,9 @@ var deck_array = []
 /* MAIN FUNCTIONS */
 function startGame() {
     var attempted = []
+    
     level = parseInt($('input[name="level"]:checked').attr('value'))
+    $('#level').html(level)
     
     total_cards = difficultLevel(level)
     
