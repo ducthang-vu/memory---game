@@ -28,30 +28,10 @@ function shuffle(array) {
 }
 
 
-
-function buildTable($el, n) {
-    size_array = []
-    switch (n) {
-        case 16:
-            size_array = ['board_size1', 'scene_size1']
-            break
-        case 32:
-            size_array = ['board_size2', 'scene_size2']
-            break
-        case 48:
-            size_array = ['board_size3', 'scene_size3']
-            break
-        case 64:
-            size_array = ['board_size1', 'scene_size4']
-            break
-        default:
-            console.log('BoardSize Error')  
-            return -1
-    }
-
-    content = '<div class="board-wrapper inline-fl-w '+ size_array[0] + '">'
-    for (let i = 0; i < n; i++) {
-        content += '<div class="scene ' + size_array[1] + '"><div position="' + i + '" class="card relative"><div class="card-face card-down absolute"></div>  <div class="card-face card-up absolute"></div></div></div>'
+function buildTable($el, level) {
+    var content = '<div class="board-wrapper inline-fl-w '+ boardClass_per_level[level][0] + '">'
+    for (let i = 0; i < nCard_per_level[level]; i++) {
+        content += '<div class="scene ' + boardClass_per_level[level][1] + '"><div position="' + i + '" class="card relative"><div class="card-face card-down absolute"></div>  <div class="card-face card-up absolute"></div></div></div>'
     }
     $el.html(content + '</div>')
 }
@@ -197,12 +177,10 @@ function startGame() {
     $('#text-admin').html('Game started!<br><br>Choose a card to start the clock.')
     level = parseInt($('input[name="level"]:checked').attr('value'))
     $('#level').html(level)
-
-    n_cards = nCard_per_level[level]
     
-    buildTable(board, n_cards)
+    buildTable(board, level)
     
-    deck = new Deck(n_cards)
+    deck = new Deck(nCard_per_level[level])
     deck.printDeck($('.card-up'), $('.card-down'))
 
     attempts = new Attempts(deck)
@@ -253,7 +231,14 @@ function endgame() {
 /*******************************/
 
 /* GLOBAL VARIABLE */
-const nCard_per_level = {1: 16, 2: 32, 3: 48, 4: 64}
+const nCard_per_level = [null, 16, 32, 48, 64]
+const boardClass_per_level =  [
+    null, 
+    ['board_size1', 'scene_size1'], 
+    ['board_size2', 'scene_size2'], 
+    ['board_size3', 'scene_size3'], 
+    ['board_size1', 'scene_size4']
+]
 const board = $('#board')
 const play_button = $('#play-button')
 
@@ -262,7 +247,6 @@ var deck
 var attempts
 var timer
 var end_time
-// var final_score
 
 
 /* EVENTS */

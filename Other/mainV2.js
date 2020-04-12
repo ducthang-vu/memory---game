@@ -85,7 +85,7 @@ class Timer {
 
 
 class Game {
-    static nCard_per_level() {return {1: 16, 2: 32, 3: 48, 4: 64}}
+    static nCard_per_level() {return [null, 16, 32, 48, 64]}
 
     constructor() {
         this.level = level_inputs.filter(':checked').attr('value')
