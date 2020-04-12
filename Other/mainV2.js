@@ -28,19 +28,19 @@ function shuffle(array) {
 /**  CLASSES **/
 class Card {
     constructor(value, back='?') {
-        this.value = value;
+        this.rank = value;
         this.back = back;
     }
 
     printFace(n) {
-        return n ? '<span>' + this.value + '</span>' : '<span>' + this.back + '</span>'
+        return n ? '<span>' + this.rank + '</span>' : '<span>' + this.back + '</span>'
     }
 }
 
 
 
 class Deck {
-    // A deck of n/2 pairs of cards, bearing the cards of each card the same random value from 10 to 99, both included.
+    // A deck of n/2 pairs of cards, bearing the cards of each card the same random rank from 10 to 99, both included.
     constructor(n) {
         this.cards = []
         for (let number of randomNumberSet(n/2, 10, 100)) {
@@ -83,21 +83,88 @@ class Timer {
     }
 }
 
+class SingleAttempt {
+    constructor(cards, posision_first) {
+        this.cards = cards
+        this.posision_first = posision_first
+        this.rank_first = this.cards[this.posision_first].value
+        this.position_second = null
+        this.rank_second = null
+        this.result = -1
+    }
+
+    complete(position_second) {
+        this.position_second = position_second
+        this.rank_second = this.cards[position_second].rank
+        this.result = this.rank_first == this.rank_second
+    }
+}
+
+class Attempt {
+
+}
+
+
+
+
 
 class Game {
     static nCard_per_level() {return [null, 16, 32, 48, 64]}
+    static boardClass_per_level()  {return [
+        null, 
+        ['board_size1', 'scene_size1'], 
+        ['board_size2', 'scene_size2'], 
+        ['board_size3', 'scene_size3'], 
+        ['board_size1', 'scene_size4']
+    ]}
 
     constructor() {
         this.level = level_inputs.filter(':checked').attr('value')
         this.deck = new Deck(Game.nCard_per_level()[this.level])
-        this.attempts 
-        this.timer
+        this.attempts = []
+        this.timer = new Timer
         this.end_time
     }
 
+    buildBoard() {
+        
+        //Building a board, assigning classes, printing the deck on the board.
+        var content = '<div class="board-wrapper inline-fl-w '+ Game.boardClass_per_level()[this.level][0] + '">'
 
-    startGame() {
-       
+        for (let i = 0; i < Game.nCard_per_level()[this.level]; i++) {
+            content += '<div class="scene ' + Game.boardClass_per_level()[this.level][1] + '"><div position="' + i + '" class="card relative"><div class="card-face card-down absolute"></div>  <div class="card-face card-up absolute"></div></div></div>'
+        }
+
+        board.html(content + '</div>')
+
+        this.deck.printDeck($('.card-up'), $('.card-down'))
+    }
+
+    activatingBoard() {
+        var self = this
+
+        board.click(function() {
+            self.timer.start()
+            self.timer.printTime($('#time')) 
+            console.log('a')
+            board.unbind('click')   //Timer start only once
+        })
+
+        $('.card').click(function() {
+            $(this).toggleClass('flipped')
+            $(this).parent().toggleClass('layer')
+
+            var position = $(this).attr('position')
+            var value = self.deck.cards[position]
+
+        })
+    }
+
+    start() {
+        mess_box.html('Game started!<br><br>Choose a card to start the clock.')
+        level_display.html(this.level)
+        this.buildBoard()
+        this.activatingBoard()
     }
 }
 
@@ -109,7 +176,8 @@ class Game {
 const board = $('#board')
 const play_button = $('#play-button')
 const level_inputs = $('input[name="level"]')
-
+const mess_box = $('#text-admin')
+const level_display = $('#level')
 
 
 

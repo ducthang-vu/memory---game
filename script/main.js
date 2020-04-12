@@ -186,6 +186,14 @@ function startGame() {
     attempts = new Attempts(deck)
     timer = new Timer()
 
+    // Timer start at first click on the board
+    board.click(function() {
+        self.timer.start()
+        self.timer.printTime($('#time')) 
+        console.log('a')
+        board.unbind('click')   //Timer start only once
+    })
+
     $('.card').click(user_click)
 }
 
@@ -193,11 +201,6 @@ function startGame() {
 function user_click() {
     $(this).toggleClass('flipped')
     $(this).parent().toggleClass('layer')
-
-    if (attempts.list.length == 0) {
-        timer.start()
-        timer.printTime($('#time')) 
-    }
 
     attempts.push($(this).attr('position'))
 
