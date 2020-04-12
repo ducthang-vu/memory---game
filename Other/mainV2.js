@@ -165,108 +165,130 @@ class Timer {
 }
 
 
-/* FUNCTIONS */
-function difficultLevel(userChoise) {
-    switch (userChoise) {
-        case 1:
-            return 16
-        case 2:
-            return 32
-        case 3: 
-            return 48
-        case 4: 
-            return 64
-        default:
-            return -1
+class Game {
+    constructor() {
+        this.level= $('#level').html(level)
+        this.deck
+        this.attempts
+        this.timer
+        this.end_time
+    }
+
+    clearHTML() {
+        try {
+            timer.stopPrintTime()
+            attempts.list = []
+        } catch {}
+        $('#attempts').html('0')
+        $('#time').html('00')
+        $('#board').html('')
+        $('#board').removeClass('board_size1 board_size2 board_size3')
+    }
+
+    getLevel() {    
+    }
+
+    start() {
+        function difficultLevel(userChoise) {
+            switch (userChoise) {
+                case 1:
+                    return 16
+                case 2:
+                    return 32
+                case 3: 
+                    return 48
+                case 4: 
+                    return 64
+                default:
+                    return -1
+            }
+        }   
+
+        function user_click() {
+            $(this).toggleClass('flipped')
+            $(this).parent().toggleClass('layer')
+    
+            if (attempts.list.length == 0) {
+                timer.start()
+                timer.printTime($('#time')) 
+            }
+    
+            attempts.push($(this).attr('position'))
+    
+            if (attempts.isClosed()) {
+                $('.card').parent().not('.layer').toggleClass('layer')
+                setTimeout(resetCards, 1000)
+                if (attempts.showLast()) {
+                    $('#text-admin').html('Great! Go ahead.')
+                } else {
+                    $('#text-admin').html('Wrong! Try again!')
+                }
+            } else {$('#text-admin').html('Pick another card.')}
+    
+            $('#attempts').html(attempts.list.length) 
+        }
+
+        function resetCards() {
+            $('.card[position="' + attempts.last().posision_first + '"]').toggleClass('flipped')
+            $('.card[position="' + attempts.last().position_second + '"]').toggleClass('flipped')
+        
+            if (attempts.showLast()) {
+                $('.card[position="' + attempts.last().posision_first + '"]').slideUp() 
+                $('.card[position="' + attempts.last().posision_first + '"]').addClass('removed')
+                $('.card[position="' + attempts.last().position_second + '"]').slideUp() 
+                $('.card[position="' + attempts.last().position_second + '"]').addClass('removed')
+                if ($('.card').not('.removed').length == 0) endgame()
+            }
+            $('.card').parent().toggleClass('layer')
+        }
+
+        function endgame() {
+            end_time = timer.elapsed()/1000
+            timer.stopPrintTime()
+            final_score = Math.round(1000 / (attempts.list.length/2 + end_time))
+        
+            $('#text-admin').html('You win!')
+            //$('#final-score').html(final_score)
+        }
+
+        
+        
+        $('#text-admin').html('Game started!<br><br>Choose a card to start the clock.')
+        level = parseInt($('input[name="level"]:checked').attr('value'))
+        n_cards = difficultLevel(level)
+        
+        buildTable(board, n_cards)
+        deck = new Deck()
+        deck.buildDeck(n_cards)
+        deck.shuffle()
+        deck.printDeck($('.card-up'), $('.card-down'))
+
+        attempts = new Attempts(deck)
+        timer = new Timer()
+
+        $('.card').click(user_click)
+    }
+
+    createGame() {
+        this.clearHTML()
+        this.start()
     }
 }
 
 
-function resetCards() {
-    $('.card[position="' + attempts.last().posision_first + '"]').toggleClass('flipped')
-    $('.card[position="' + attempts.last().position_second + '"]').toggleClass('flipped')
-
-    if (attempts.showLast()) {
-        $('.card[position="' + attempts.last().posision_first + '"]').slideUp() 
-        $('.card[position="' + attempts.last().posision_first + '"]').addClass('removed')
-        $('.card[position="' + attempts.last().position_second + '"]').slideUp() 
-        $('.card[position="' + attempts.last().position_second + '"]').addClass('removed')
-        if ($('.card').not('.removed').length == 0) endgame()
-    }
-    $('.card').parent().toggleClass('layer')
-}
 
 
-function resetAll() {
-    try {
-        timer.stopPrintTime()
-        attempts.list = []
-    } catch {}
-    $('#attempts').html('0')
-    $('#time').html('00')
-    $('#board').html('')
-}
+
+
+
+
+
+
+
+
 
 
 /* MAIN FUNCTIONS */
-function startGame() {
-    resetAll()
-
-    $('#level').html(level)
-    $('#text-admin').html('Game started!<br><br>Choose a card to start the clock.')
-    level = parseInt($('input[name="level"]:checked').attr('value'))
-    
-    n_cards = difficultLevel(level)
-    
-    buildTable(board, n_cards)
-    
-    deck = new Deck()
-    deck.buildDeck(n_cards)
-    deck.shuffle()
-    deck.printDeck($('.card-up'), $('.card-down'))
-
-    attempts = new Attempts(deck)
-    timer = new Timer()
-
-    $('.card').click(user_click)
-}
-
-
-function user_click() {
-    $(this).toggleClass('flipped')
-    $(this).parent().toggleClass('layer')
-
-    if (attempts.list.length == 0) {
-        timer.start()
-        timer.printTime($('#time')) 
-    }
-
-    attempts.push($(this).attr('position'))
-
-    if (attempts.isClosed()) {
-        $('.card').parent().not('.layer').toggleClass('layer')
-        setTimeout(resetCards, 1000)
-        if (attempts.showLast()) {
-            $('#text-admin').html('Great! Go ahead.')
-        } else {
-            $('#text-admin').html('Wrong! Try again!')
-        }
-    } else {$('#text-admin').html('Pick another card.')}
-
-    $('#attempts').html(attempts.list.length) 
-}
-
-
-function endgame() {
-    end_time = timer.elapsed()/1000
-    timer.stopPrintTime()
-    final_score = Math.round(1000 / (attempts.list.length/2 + end_time))
-
-    $('#text-admin').html('You win!')
-    //$('#final-score').html(final_score)
-}
-
-
 
 
 /*******************************/
@@ -277,13 +299,12 @@ function endgame() {
 const board = $('#board')
 const play_button = $('#play-button')
 
-var level
-var deck
-var attempts
-var timer
-var end_time
-// var final_score
+
 
 
 /* EVENTS */
 play_button.click(startGame);
+
+
+/*********************************************/
+
