@@ -7,8 +7,17 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/main.css">
 </head>
-<body>
-    <div class="player-wrapper">
+<body class="black flex-w white-color">
+    <header class="header">
+        <div class="container flex-nw central">
+            <h1>Memory</h1>
+
+        <div class="text-center">
+            <button id="play-button" class="play-button button block green white-color">
+                Play
+            </button>
+        </div>
+
         <div class="input-box text-right">
             <div class="input-box-inner">
                 <input id="level_1" name="level" type="radio" value="1" checked/>
@@ -30,40 +39,59 @@
                 <label for="level_3">Level 4</label>
             </div>   
         </div>
-    
-        <div class="text-center">
-            <button id="play-button" class="button block green white-color">
-                Play
-            </button>
         </div>
-    </div>
-    
+    </header>
 
-    <div class="output">
-        <div class="box">
-            <div>Level:</div>
-            <span id="level">n/a</span>
-        </div>
-        <div class="box">
-            <div>Level:</div>Score
-            <span id="score">0</span>
-        </div>
-        <div class="box">
-            <div>Time:</div>
-            <span id="time">0</span>
-        </div>
-    </div>
+    <main>
+        <div class="container central flex-nw">
+            <section class="info-section">
+                <div class="output flex-w">
+                    <div class="wrapper text-center">
+                        <div class="wr-label">Level:</div>
+                        <div class="box inline-fl-w">
+                            <span id="level">1</span>
+                        </div>
+                    </div>
     
-    <div id="board" class="flex-w central">
-        board
-    </div>
+                    <div class="wrapper text-center">
+                        <div class="wr-label">Tries:</div>
+                        <div class="box inline-fl-w">
+                            <span id="attempts">0</span>
+                        </div>
+                    </div>
 
+                    <div class="wrapper text-center">
+                        <div class="wr-label">Time:</div>
+                        <div class="box inline-fl-w">
+                            <span id="time">00</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!--  -->
+                <div class="text-box">
+                    <span id="text-admin">Press "Play" to start the game!</span>
+                    <div>
+                        Final score is:
+                        <span id="final-score"></span>
+                    </div>
+                </div>
+            </section>
+            
+            <section class="board-section">
+                <div id="board" class="flex-w central">
+                </div>
+            </section>
+        </div> 
+    </main>  
 
     <footer>
-        <p><br>
-            Made by Thang <br>
-            11/04/2020
-        </p>
+        <div class="container central text-right">
+            <p><br>
+                Made by Thang <br>
+                11/04/2020
+            </p>
+        </div>   
     </footer>
 
     <!-- SCRIPT -->

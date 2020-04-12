@@ -1,0 +1,24 @@
+if (!$(this).hasClass('blocked')) {
+            $(this).toggleClass('flipped')
+            attempted.push($(this).attr('position'))
+            console.log(attempted)
+            if (attempted.length == 2) {
+                if (deck_array[attempted[0]].value == deck_array[attempted[1]].value) {
+                    console.log('match')
+                    // block cards
+                    $('.card[position="' + attempted[0] + '"]').addClass('blocked')
+                    $('.card[position="' + attempted[1] + '"]').addClass('blocked')
+                    attempted = []
+                    if ($('.card:not(.blocked)').length == 0) {
+                        alert('you win!')
+                    }
+                }
+                else {
+                    function a() {
+                        $('.card[position="' + attempted[0] + '"]').toggleClass('flipped')
+                        $('.card[position="' + attempted[1] + '"]').toggleClass('flipped')
+                        attempted = []}
+                    setTimeout(a, 1000)
+                }
+            }    
+        }

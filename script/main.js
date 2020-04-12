@@ -2,27 +2,152 @@ console.log('main.js is working')
 console.log($)
 
 
+/* UTILITIES FUNCTION */
+function randomNumberSet(n, min, max) {
+    var randomNumbers = new Set()
+
+    if (isNaN(n) || n < 1 || isNaN(max) || isNaN(min)) {return -1}  // Validation
+
+    while (randomNumbers.size < n) {
+        randomNumbers.add(Math.floor(Math.random() * (max - min)) + min)
+    }
+    
+    return randomNumbers
+}
+
+
+function buildTable($el, n) {
+    content = ''
+    for (let i = 0; i < n; i++) {
+        content += '<div class="scene"><div position="' + i + '" class="card relative"><div class="card-face card-down absolute"></div>  <div class="card-face card-up absolute"></div></div></div>'
+    }
+    $el.html(content);
+}
 
 
 /* CLASSES */
 class Card {
-    constructor(value, faceUp=false) {
+    constructor(value, back='?') {
         this.value = value;
-        this.faceUp = faceUp;
+        this.back = back;
     }
 
-    flip() {
-        this.faceUp = !this.faceUp
-    }
-
-    printFace() {
-        return this.faceUp ? '<span>' + this.value + '</span>' : '<span>?</span>'
+    printFace(n) {
+        return n ? '<span>' + this.value + '</span>' : '<span>' + this.back + '</span>'
     }
 }
 
+
+class Deck {
+    constructor(cards=[]) {
+        this.cards = cards
+    }
+    
+    buildDeck(n) {
+        for (let number of randomNumberSet(n/2, 10, 100)) {
+            this.cards.push(new Card(number), new Card(number))
+        }
+    }
+
+    shuffle() {
+        var m = this.cards.length, t, i;
+        while (m) { // While there remain elements to shuffle…
+            i = Math.floor(Math.random() * m--) // Pick a remaining element…
+            t = this.cards[m]; // And swap it with the current element.
+            this.cards[m] = this.cards[i]
+            this.cards[i] = t
+        }
+    }
+
+    printDeck($el_front, $el_back) {
+        for (let i = 0; i < this.cards.length; i ++) {
+            $el_front[i].innerHTML = this.cards[i].printFace(1) //  $('.card-up')
+            $el_back[i].innerHTML = this.cards[i].printFace(0)  //$('.card-down')
+        }
+    }
+}
+
+
+class SingleAttempt {
+    constructor(cards, posision_first) {
+        this.cards = cards
+        this.posision_first = posision_first
+        this.value_first = this.cards[this.posision_first].value
+        this.position_second = null
+        this.value_second = null
+        this.result = -1
+    }
+
+    complete(position_second) {
+        this.position_second = position_second
+        this.value_second = this.cards[position_second].value
+        this.result = this.value_first == this.value_second
+    }
+}
+
+
+class Attempts {
+    constructor(deck) {
+        this.cards = deck.cards
+        this.list = []
+    }
+
+    last() {
+        return this.list[this.list.length - 1]
+    }
+
+    isClosed() {
+        return this.list[this.list.length - 1] == undefined || this.list[this.list.length - 1].result != -1
+    }
+
+    push(position) {
+        var isClosed = this.isClosed()
+        if (isClosed) {
+            this.list.push(new SingleAttempt(this.cards, position))
+        }
+        else {
+            this.list[this.list.length - 1].complete(position)
+        }    
+    }
+
+    showLast() {
+        return this.list[this.list.length - 1] == undefined ? null : this.list[this.list.length - 1].result
+    }
+}
+
+
+class Timer {
+    constructor() {
+        this.startTime
+        this.count
+    }
+
+    start() {
+        this.startTime = performance.now()
+    }
+
+    elapsed() {
+        return performance.now() - this.startTime
+    }
+
+    elapsed_seconds() {
+        return Math.round(this.elapsed() / 1000)
+    }
+
+    printTime($el) {
+        this.count = setInterval(() => {
+            $el.html(this.elapsed_seconds())
+        }, 1000);
+    }
+
+    stopPrintTime() {
+        clearInterval(this.count)
+    }
+}
+
+
 /* FUNCTIONS */
 function difficultLevel(userChoise) {
-    // A function accepting an integer "userChoise" and returning an integer according to the game rules as described in README.md; return -1 if parameter is invalid.
     switch (userChoise) {
         case 1:
             return 16
@@ -38,42 +163,68 @@ function difficultLevel(userChoise) {
 }
 
 
-function buildTable($el, n) {
-    content = ''
-    for (let i = 0; i < n; i++) {
-        content += '<div class="scene"><div position="' + i + '" class="card relative"><div class="card-face card-down absolute"></div>  <div class="card-face card-up absolute"></div></div></div>'
+function resetCards() {
+    $('.card[position="' + attempts.last().posision_first + '"]').toggleClass('flipped')
+    $('.card[position="' + attempts.last().position_second + '"]').toggleClass('flipped')
+
+    if (attempts.showLast()) {
+        $('.card[position="' + attempts.last().posision_first + '"]').slideUp() 
+        $('.card[position="' + attempts.last().posision_first + '"]').addClass('removed')
+        $('.card[position="' + attempts.last().position_second + '"]').slideUp() 
+        $('.card[position="' + attempts.last().position_second + '"]').addClass('removed')
+        if ($('.card').not('.removed').length == 0) endgame()
     }
-    $el.html(content);
+    $('.card').parent().toggleClass('layer')
 }
+
+
+/* MAIN FUNCTIONS */
+function startGame() {
+    level = parseInt($('input[name="level"]:checked').attr('value'))
+    $('#level').html(level)
     
+    n_cards = difficultLevel(level)
+    
+    buildTable(board, n_cards)
+    
+    deck = new Deck()
+    deck.buildDeck(n_cards)
+    deck.shuffle()
+    deck.printDeck($('.card-up'), $('.card-down'))
 
-function buildDeck(n) {
-    array = []
-    for (let i = 0; i < n / 2; i++) {
-        var newNumber = Math.floor(Math.random() * 100)
-        array.push(new Card(newNumber), new Card(newNumber))
-    }
-    return array
+    attempts = new Attempts(deck)
+    timer = new Timer()
+
+    $('.card').click(user_click)
 }
 
 
-function shuffle(array) {
-    var m = array.length, t, i;
-    while (m) { // While there remain elements to shuffle…
-        i = Math.floor(Math.random() * m--) // Pick a remaining element…
-        t = array[m]; // And swap it with the current element.
-        array[m] = array[i]
-        array[i] = t
+function user_click() {
+    $(this).toggleClass('flipped')
+    $(this).parent().toggleClass('layer')
+
+    if (attempts.list.length == 0) {
+        timer.start()
+        timer.printTime($('#time')) 
     }
-    return array
+
+    attempts.push($(this).attr('position'))
+
+    if (attempts.isClosed()) {
+        $('.card').parent().not('.layer').toggleClass('layer')
+        setTimeout(resetCards, 1000)
+    }
+    $('#attempts').html(attempts.list.length) 
 }
 
 
-function printDeck(array) {
-    for (let i = 0; i < array.length; i ++) {
-        $('.card-up')[i].innerHTML = array[i].value
-        $('.card-down')[i].innerHTML = array[i].printFace()
-    }
+function endgame() {
+    end_time = timer.elapsed()/1000
+    timer.stopPrintTime()
+    final_score = Math.round(1000 / (attempts.list.length/2 + end_time))
+
+    $('#text-admin').html('You win!')
+    $('#final-score').html(final_score)
 }
 
 
@@ -81,72 +232,19 @@ function printDeck(array) {
 const board = $('#board')
 const play_button = $('#play-button')
 
-var level;
-var deck_array = []
+var level
+var deck
+var attempts
+var timer
+var end_time
+var final_score
 
-
-
-/* MAIN FUNCTIONS */
-function startGame() {
-    var attempted = []
-    
-    level = parseInt($('input[name="level"]:checked').attr('value'))
-    $('#level').html(level)
-    
-    total_cards = difficultLevel(level)
-    
-    buildTable(board, total_cards)
-    
-    deck_array = shuffle(buildDeck(total_cards))
-
-    printDeck(deck_array)
-
-    $('.card').click(function() { 
-        if (!$(this).hasClass('blocked')) {
-            $(this).toggleClass('flipped')
-            attempted.push($(this).attr('position'))
-            console.log(attempted)
-            if (attempted.length == 2) {
-                if (deck_array[attempted[0]].value == deck_array[attempted[1]].value) {
-                    console.log('match')
-                    // block cards
-                    $('.card[position="' + attempted[0] + '"]').addClass('blocked')
-                    $('.card[position="' + attempted[1] + '"]').addClass('blocked')
-                    attempted = []
-                    if ($('.card:not(.blocked)').length == 0) {
-                        alert('you win!')
-                    }
-                }
-                else {
-                    function a() {
-                        $('.card[position="' + attempted[0] + '"]').toggleClass('flipped')
-                        $('.card[position="' + attempted[1] + '"]').toggleClass('flipped')
-                        attempted = []}
-                    setTimeout(a, 1000)
-                }
-            }    
-        }
-    });
-}
-
-
-
-
-/* PROGRAM */
+/* EVENTS */
 play_button.click(startGame);
 
 
 
 
 
-/*
-scelta difficoltà
 
-generare board
 
-creare carte random (metà dei bottoni)
-
-Iterazione:
-    clicca 1
-    clicca 2 
-*/
