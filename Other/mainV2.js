@@ -1,3 +1,15 @@
+function randomNumberSet(n, min, max) {
+    var randomNumbers = new Set()
+
+    if (isNaN(n) || n < 1 || isNaN(max) || isNaN(min)) {return -1}  // Validation
+
+    while (randomNumbers.size < n) {
+        randomNumbers.add(Math.floor(Math.random() * (max - min)) + min)
+    }
+    
+    return randomNumbers
+}
+
 
 class Card {
     constructor(value, back='?') {
@@ -12,11 +24,9 @@ class Card {
 
 
 class Deck {
-    constructor(cards=[]) {
-        this.cards = cards
-    }
-    
-    buildDeck(n) {
+    // A deck of n/2 pairs of cards, bearing the cards of each card the same random value from 10 to 99, both included.
+    constructor(n) {
+        this.cards = []
         for (let number of randomNumberSet(n/2, 10, 100)) {
             this.cards.push(new Card(number), new Card(number))
         }
@@ -41,10 +51,46 @@ class Deck {
 }
 
 
+class Timer {
+    constructor() {
+        this.startTime
+        this.count
+    }
+
+    start() {
+        this.startTime = performance.now()
+    }
+
+    elapsed() {
+        return performance.now() - this.startTime
+    }
+
+    printTime($el) {
+        this.count = setInterval(() => {
+            $el.html(Math.round(this.elapsed() / 1000))
+        }, 1000);
+    }
+
+    stopPrintTime() {
+        clearInterval(this.count)
+    }
+}
 
 
 
 
+class Game {
+    constructor() {
+        this.level = level_inputs.filter(':checked').attr('value')
+        this.deck = new Deck
+        this.attempts
+        this.timer
+        this.end_time
+    }
+
+
+    startGame() {}
+}
 
 /*******************************/
 /********* MAIN SCRITP *********/
@@ -53,21 +99,7 @@ class Deck {
 /* GLOBAL VARIABLE */
 const board = $('#board')
 const play_button = $('#play-button')
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+const level_inputs = $('input[name="level"]')
 
 
 
@@ -75,7 +107,12 @@ const play_button = $('#play-button')
 
 
 /* EVENTS */
-play_button.click(startGame);
+
+
+play_button.click(function() {
+    game = new Game
+    game.start()
+});
 
 
 /*********************************************/

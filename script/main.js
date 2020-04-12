@@ -58,11 +58,9 @@ class Card {
 
 
 class Deck {
-    constructor(cards=[]) {
-        this.cards = cards
-    }
-    
-    buildDeck(n) {
+    // A deck of n/2 pairs of cards, bearing the cards of each card the same random value from 10 to 99, both included.
+    constructor(n) {
+        this.cards = []
         for (let number of randomNumberSet(n/2, 10, 100)) {
             this.cards.push(new Card(number), new Card(number))
         }
@@ -216,8 +214,7 @@ function startGame() {
     
     buildTable(board, n_cards)
     
-    deck = new Deck()
-    deck.buildDeck(n_cards)
+    deck = new Deck(n_cards)
     deck.shuffle()
     deck.printDeck($('.card-up'), $('.card-down'))
 
