@@ -25,6 +25,34 @@ function buildTable($el, n) {
 }
 
 
+function BoardSize($el, n) {
+    switch (n) {
+        case 16:
+            $el.addClass('board_size1')
+            $el.children().addClass('scene_size1')
+            break
+
+        case 32:
+            $el.addClass('board_size2')
+            $el.children().addClass('scene_size2')
+            break
+        case 48:
+            $el.addClass('board_size3')
+            $el.children().addClass('scene_size3')
+            break
+
+        case 64:
+            $el.addClass('board_size1')
+            $el.children().addClass('scene_size4')
+            break
+        
+            default:
+            console.log('BoardSize Error')
+    }
+    
+}
+
+
 /* CLASSES */
 class Card {
     constructor(value, back='?') {
@@ -61,8 +89,8 @@ class Deck {
 
     printDeck($el_front, $el_back) {
         for (let i = 0; i < this.cards.length; i ++) {
-            $el_front[i].innerHTML = this.cards[i].printFace(1) //  $('.card-up')
-            $el_back[i].innerHTML = this.cards[i].printFace(0)  //$('.card-down')
+            $el_front[i].innerHTML = this.cards[i].printFace(1) 
+            $el_back[i].innerHTML = this.cards[i].printFace(0)  
         }
     }
 }
@@ -178,14 +206,31 @@ function resetCards() {
 }
 
 
+function resetAll() {
+    try {
+        timer.stopPrintTime()
+        attempts.list = []
+    } catch {}
+    $('#attempts').html('0')
+    $('#time').html('00')
+    $('#board').html('')
+    $('#board').removeClass('board_size1 board_size2 board_size3')
+}
+
+
 /* MAIN FUNCTIONS */
 function startGame() {
-    level = parseInt($('input[name="level"]:checked').attr('value'))
+    resetAll()
+
     $('#level').html(level)
+    $('#text-admin').html('Game started!<br><br>Choose a card to start the clock.')
+    level = parseInt($('input[name="level"]:checked').attr('value'))
+    
     
     n_cards = difficultLevel(level)
     
     buildTable(board, n_cards)
+    BoardSize(board, n_cards) 
     
     deck = new Deck()
     deck.buildDeck(n_cards)
@@ -213,7 +258,13 @@ function user_click() {
     if (attempts.isClosed()) {
         $('.card').parent().not('.layer').toggleClass('layer')
         setTimeout(resetCards, 1000)
-    }
+        if (attempts.showLast()) {
+            $('#text-admin').html('Great! Go ahead.')
+        } else {
+            $('#text-admin').html('Wrong! Try again!')
+        }
+    } else {$('#text-admin').html('Pick another card.')}
+
     $('#attempts').html(attempts.list.length) 
 }
 
@@ -224,9 +275,15 @@ function endgame() {
     final_score = Math.round(1000 / (attempts.list.length/2 + end_time))
 
     $('#text-admin').html('You win!')
-    $('#final-score').html(final_score)
+    //$('#final-score').html(final_score)
 }
 
+
+
+
+/*******************/
+/*** MAIN SCRITP ***/
+/*******************/
 
 /* GLOBAL VARIABLE */
 const board = $('#board')
@@ -237,14 +294,8 @@ var deck
 var attempts
 var timer
 var end_time
-var final_score
+// var final_score
+
 
 /* EVENTS */
 play_button.click(startGame);
-
-
-
-
-
-
-
