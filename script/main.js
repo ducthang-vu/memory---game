@@ -16,6 +16,19 @@ function randomNumberSet(n, min, max) {
 }
 
 
+function shuffle(array) {
+    //Shuffling randmoly array item's position
+    var m = array.length, t, i;
+    while (m) { // While there remain elements to shuffle…
+        i = Math.floor(Math.random() * m--) // Pick a remaining element…
+        t = array[m]; // And swap it with the current element.
+        array[m] = array[i]
+        array[i] = t
+    }
+}
+
+
+
 function buildTable($el, n) {
     size_array = []
     switch (n) {
@@ -64,16 +77,7 @@ class Deck {
         for (let number of randomNumberSet(n/2, 10, 100)) {
             this.cards.push(new Card(number), new Card(number))
         }
-    }
-
-    shuffle() {
-        var m = this.cards.length, t, i;
-        while (m) { // While there remain elements to shuffle…
-            i = Math.floor(Math.random() * m--) // Pick a remaining element…
-            t = this.cards[m]; // And swap it with the current element.
-            this.cards[m] = this.cards[i]
-            this.cards[i] = t
-        }
+        shuffle(this.cards)
     }
 
     printDeck($el_front, $el_back) {
@@ -160,22 +164,6 @@ class Timer {
 
 
 /* FUNCTIONS */
-function difficultLevel(userChoise) {
-    switch (userChoise) {
-        case 1:
-            return 16
-        case 2:
-            return 32
-        case 3: 
-            return 48
-        case 4: 
-            return 64
-        default:
-            return -1
-    }
-}
-
-
 function resetCards() {
     $('.card[position="' + attempts.last().posision_first + '"]').toggleClass('flipped')
     $('.card[position="' + attempts.last().position_second + '"]').toggleClass('flipped')
@@ -205,17 +193,16 @@ function resetAll() {
 /* MAIN FUNCTIONS */
 function startGame() {
     resetAll()
-
-    $('#level').html(level)
+    
     $('#text-admin').html('Game started!<br><br>Choose a card to start the clock.')
     level = parseInt($('input[name="level"]:checked').attr('value'))
-    
-    n_cards = difficultLevel(level)
+    $('#level').html(level)
+
+    n_cards = nCard_per_level[level]
     
     buildTable(board, n_cards)
     
     deck = new Deck(n_cards)
-    deck.shuffle()
     deck.printDeck($('.card-up'), $('.card-down'))
 
     attempts = new Attempts(deck)
@@ -266,6 +253,7 @@ function endgame() {
 /*******************************/
 
 /* GLOBAL VARIABLE */
+const nCard_per_level = {1: 16, 2: 32, 3: 48, 4: 64}
 const board = $('#board')
 const play_button = $('#play-button')
 

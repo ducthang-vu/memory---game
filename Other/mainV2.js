@@ -11,6 +11,21 @@ function randomNumberSet(n, min, max) {
 }
 
 
+function shuffle(array) {
+    //Shuffling randmoly array item's position
+    var m = array.length, t, i;
+    while (m) { // While there remain elements to shuffle…
+        i = Math.floor(Math.random() * m--) // Pick a remaining element…
+        t = array[m]; // And swap it with the current element.
+        array[m] = array[i]
+        array[i] = t
+    }
+}
+
+
+
+
+/**  CLASSES **/
 class Card {
     constructor(value, back='?') {
         this.value = value;
@@ -23,6 +38,7 @@ class Card {
 }
 
 
+
 class Deck {
     // A deck of n/2 pairs of cards, bearing the cards of each card the same random value from 10 to 99, both included.
     constructor(n) {
@@ -30,16 +46,7 @@ class Deck {
         for (let number of randomNumberSet(n/2, 10, 100)) {
             this.cards.push(new Card(number), new Card(number))
         }
-    }
-
-    shuffle() {
-        var m = this.cards.length, t, i;
-        while (m) { // While there remain elements to shuffle…
-            i = Math.floor(Math.random() * m--) // Pick a remaining element…
-            t = this.cards[m]; // And swap it with the current element.
-            this.cards[m] = this.cards[i]
-            this.cards[i] = t
-        }
+        shuffle(this.cards)
     }
 
     printDeck($el_front, $el_back) {
@@ -77,19 +84,21 @@ class Timer {
 }
 
 
-
-
 class Game {
+    static nCard_per_level() {return {1: 16, 2: 32, 3: 48, 4: 64}}
+
     constructor() {
         this.level = level_inputs.filter(':checked').attr('value')
-        this.deck = new Deck
-        this.attempts
+        this.deck = new Deck(Game.nCard_per_level()[this.level])
+        this.attempts 
         this.timer
         this.end_time
     }
 
 
-    startGame() {}
+    startGame() {
+       
+    }
 }
 
 /*******************************/
