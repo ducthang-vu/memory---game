@@ -129,7 +129,7 @@ class Attempts {
         }    
     }
 
-    showLast() {
+    lastResult() {
         return this.list[this.list.length - 1] == undefined ? null : this.list[this.list.length - 1].result
     }
 }
@@ -186,7 +186,7 @@ function resetCards() {
     $('.card[position="' + attempts.last().posision_first + '"]').toggleClass('flipped')
     $('.card[position="' + attempts.last().position_second + '"]').toggleClass('flipped')
 
-    if (attempts.showLast()) {
+    if (attempts.lastResult()) {
         $('.card[position="' + attempts.last().posision_first + '"]').slideUp() 
         $('.card[position="' + attempts.last().posision_first + '"]').addClass('removed')
         $('.card[position="' + attempts.last().position_second + '"]').slideUp() 
@@ -246,7 +246,7 @@ function user_click() {
     if (attempts.isClosed()) {
         $('.card').parent().not('.layer').toggleClass('layer')
         setTimeout(resetCards, 1000)
-        if (attempts.showLast()) {
+        if (attempts.lastResult()) {
             $('#text-admin').html('Great! Go ahead.')
         } else {
             $('#text-admin').html('Wrong! Try again!')
