@@ -262,8 +262,7 @@ function endgame() {
     timer.stopPrintTime()
     final_score = Math.round(1000 / (attempts.list.length/2 + end_time))
 
-    $('#text-admin').html('You win!')
-    //$('#final-score').html(final_score)
+    $('#text-admin').html('Congratulations, you win!')
 }
 
 
