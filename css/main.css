@@ -120,9 +120,16 @@ label {
     align-items: center;
 }
 
-    .header .container > * {
-        flex-basis: calc(100% / 3)
+    header .left-header,
+    header .right-header {
+        flex-basis: 50%;
     }
+
+    header .center-header {
+        flex-basis: 100%;
+        order: 1;
+    }
+
         .link-github {
             margin-left: 15px;
             background: inherit;
@@ -173,37 +180,41 @@ main {
     flex-grow: 1;
 }
 
+.info-section,
+    .board-section {
+        flex-basis: 100%
+    }
+
 
 /* Main: INFO-SECTION */
-.info-section {
-    flex-basis: 35%;
+.output {
+    padding-top: 25px;
+    justify-content: center;
 }
 
-    .output {
-        justify-content: flex-start;
+    .output .wrapper {
+        margin: 15px;
     }
-        .output .wrapper {
-            margin: 20px 20px 40px 0;
+
+        .wr-label {
+            margin-bottom: 10px;
+            font-size: 120%;
         }
 
-            .wr-label {
-                margin-bottom: 10px;
-                font-size: 120%;
-            }
-
-            .box {
-                justify-content: center;
-                align-items: center;
-                height: 60px;
-                width: 60px;
-                border: 1px solid #fff;
-                font-size: 200%;
-                font-weight: 800;
-            }
+        .box {
+            justify-content: center;
+            align-items: center;
+            height: 60px;
+            width: 60px;
+            border: 1px solid #fff;
+            font-size: 200%;
+            font-weight: 800;
+        }
 
     .text-box {
         font-size: 120%;
     }
+
 
 /* Main: BOARD-SECTION */
 .board-section {
@@ -213,16 +224,10 @@ main {
         display: none;
     }
 
-    .board_size1 {
+    .board_size1,
+    .board_size2,
+    .board_size3{
         width: 402px;
-    }
-
-    .board_size2 {
-        width: 602px;
-    }
-
-    .board_size3 {
-        width: 524px;
     }
 
         .scene {
@@ -232,21 +237,9 @@ main {
         .scene_size1 {
             width: 100px;
             height: 100px;
-            font-size: 200%;
         }
-
-        .scene_size2 {
-            width: 75px;
-            height: 75px;
-            font-size: 150%;
-        }
-
-        .scene_size3 {
-            width: 65px;
-            height: 65px;
-            font-size: 120%;
-        }
-
+        .scene_size2,
+        .scene_size3,
         .scene_size4 {
             width: 50px;
             height: 50px;
@@ -334,6 +327,130 @@ footer .rules {
     footer .rules > p {
         margin-bottom: 15px;
     }
+
+
+
+@media screen and (max-width: 540px) {
+        /* GENERAL */
+        body {
+            font-size: 12px;
+        }
+
+        /* UTILITIES */
+        .container {
+            max-width: 95%;
+        }
+
+
+        /* HEADER */
+        .header .container > * {
+            flex-basis: 100%;
+            justify-content: center;
+        }
+
+        .right-header {
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+
+            .input-box-inner {
+                display: inline-block;
+                margin: 5px;
+            }     
+
+            #volume-button {
+                display: none;
+            }
+
+        /* MAIN */
+        main .container {
+            max-width: 100%;
+        }
+
+            /* Main: BOARD */
+            .board_size1,
+            .board_size2,
+            .board_size3{
+                width: 252px !important;
+                font-size: 50%;
+            }
+        
+                .scene_size1 {
+                    width: 50px !important;
+                    height: 50px !important;
+                }
+                .scene_size2,
+                .scene_size3,
+                .scene_size4 {
+                    width: 50px !important;
+                    height: 50px !important;
+                }
+}
+
+
+@media screen and (min-width: 720px) {
+    /* HEADER */
+    .header .container > * {
+        flex-basis: calc(100% / 3)
+    }
+
+        header .center-header {
+            order: 0;
+        }
+
+    /* Main: BOARD-SECTION */
+    .board_size1 {
+        width: 402px;
+    }
+
+    .board_size2 {
+        width: 602px;
+    }
+
+    .board_size3 {
+        width: 524px;
+    }
+
+        .scene_size1 {
+            width: 100px;
+            height: 100px;
+            font-size: 200%;
+        }
+
+        .scene_size2 {
+            width: 75px;
+            height: 75px;
+            font-size: 150%;
+        }
+
+        .scene_size3 {
+            width: 65px;
+            height: 65px;
+            font-size: 120%;
+        }
+
+        .scene_size4 {
+            width: 50px;
+            height: 50px;
+        }
+
+}
+
+@media screen and (min-width: 960px) {
+    .info-section {
+        text-align: left;
+        flex-basis: 35%;
+        order: -1;
+    }
+
+    .output {
+        justify-content: flex-start;
+    }
+
+    .output .wrapper {
+        margin: 20px 20px 40px 0;
+    }
+}
 
 
 @media screen and (max-height: 590px) and (min-width: 960px) {
