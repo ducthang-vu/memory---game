@@ -147,9 +147,7 @@ class Game {
     removeCards() {
         //Removes cards from the board chosen in last attempt (two tries); should be used after a successful attempt.
         $('.card[position="' + self.attempts[self.attempts.length-1].first_pos + '"]').slideUp() 
-        $('.card[position="' + self.attempts[self.attempts.length-1].first_pos + '"]').addClass('removed')
         $('.card[position="' + self.attempts[self.attempts.length-1].second_pos + '"]').slideUp() 
-        $('.card[position="' + self.attempts[self.attempts.length-1].second_pos + '"]').addClass('removed')
         self.successfulAttempts++
     }
 
