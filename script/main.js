@@ -267,6 +267,12 @@ function switchVolume() {
 }
 
 
+function showInfo() {
+    $('#rules').toggle()
+    info_button.toggleClass('darkred-color')
+    info_button.children().toggleClass('fa-question-circle fa-window-close')
+} 
+
 /***************************************/
 /********* --- MAIN SCRITP --- *********/
 /***************************************/
@@ -280,13 +286,14 @@ const level_display = $('#level')
 const audioBleep = document.getElementById('audio-bleep')
 const audioSuccess = document.getElementById('audio-success')
 const audioVictory = document.getElementById('audio-victory')
-
+const info_button = $('#info-button')
 const volume_button = $('#volume-button')
 var activeAudio = true
 
 
 /* EVENTS */
 volume_button.click(switchVolume)
+info_button.click(showInfo)
 
 play_button.click(
     function() {

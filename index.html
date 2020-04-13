@@ -99,14 +99,40 @@
     </main>  
 
     <footer>
-        <div class="container central text-right">
-            <p>Made by Thang<br>11/04/2020</p>
-        </div>   
+        <div class="container relative central">
+            <div class="main-footer flex-nw">
+                <button id="info-button" class="info-button">
+                    <i class="far fa-question-circle"></i>
+                </button>
+    
+                <div class="footer-right text-right">
+                    <p>Made by Thang<br>11/04/2020</p>
+                </div>  
+            </div> 
+        
+            <div id="rules" class="rules absolute display-none text-left ">
+                <p>
+                    Difficulty levels:<br>&nbsp;&nbsp;&nbsp;1 - 16 cards;<br>&nbsp;&nbsp;&nbsp;2 - 32 cards;<br>&nbsp;&nbsp;&nbsp;3 - 48 cards; and<br>&nbsp;&nbsp;&nbsp;4 - 64 cards
+                </p>
+    
+                <p>
+                    A deck of cards is composed of pairs of cards with the same rank (from 10 to 99).
+                </p>
+    
+                <p>
+                    The player starts by picking up two cards. If the cards are of the same rank, they are removed from the game; otherwise, they are laid back on the board face-down.<br>
+                    The player continues to pick pairs of cards, until all cards are removed, thus ending the game.
+                </p>
+            </div>
+        </div>
     </footer>
 
+
+    <!-- AUDIO -->
     <audio id="audio-bleep" src="bleep.mp3"></audio>
     <audio id="audio-success" src="success.mp3"></audio>
     <audio id="audio-victory" src="victory.mp3"></audio>
+
 
     <!-- SCRIPT -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>

@@ -7,7 +7,7 @@ MEMORY is a fun card game which does not require a lot of code. This is an imple
 
 1 - The player chooses the difficulty level: 1, 2, 3 or 4. These levels require the player to solve a game with a deck of respectively 16, 32, 48 and 64 cards.
 
-2 - A deck of cards is composed of pairs of cards with the same rank, ranks are defined randomly by the program with values between 10 and 99, included.
+2 - A deck of cards is composed of pairs of cards with the same rank. Ranks are defined randomly by the program with values between 10 and 99, included.
 
 3 - The cards are shuffled and laid face-down.
 

@@ -15,13 +15,17 @@ body {
 
 button {
     padding: 10px;
+    color: inherit;
+    background: inherit;
 }
 
 button,
+button:focus,
 a,
 input,
 label {
     cursor: pointer;
+    outline: 0;
 }
 
 
@@ -57,6 +61,10 @@ label {
     text-align: center;
 }
 
+.text-left {
+    text-align: left;
+}
+
 .text-right {
     text-align: right;
 }
@@ -85,12 +93,16 @@ label {
     background: darkgreen;
 }
 
-.darkgreen-color{
-    color: darkgreen;
+.darkred {
+    background: darkred;
 }
 
 .darkred-color {
     color: darkred;
+}
+
+.darkgreen-color{
+    color: darkgreen;
 }
 
 .white-color {
@@ -294,7 +306,32 @@ main {
 
 
 /* FOOTER  */
-footer {
-    font-style: italic;
-    font-size: 50%;
+.main-footer {
+    justify-content: space-between;
 }
+
+    .main-footer .info-button {
+        padding: 0;
+        font-size: 150%;
+        border: 0;
+    }
+
+    footer .footer-right {
+        font-style: italic;
+        font-size: 50%;
+    }
+
+footer .rules {
+    top: 10px;
+    left: 10px;
+    transform: translate(0%, -100%);
+    padding: 5px;
+    width: 800px;
+    background: gray;
+    border: 1px solid #fff;
+    font-size: 90%;
+}
+
+    footer .rules > p {
+        margin-bottom: 15px;
+    }
