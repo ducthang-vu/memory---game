@@ -120,6 +120,7 @@ class Game {
         this.deck = new Deck(Game.nCard_per_level()[this.level])      
         this.timer = new Timer
         this.attempts = []  //List of all'attempts, an attempts being a pair of cards chosen by the player
+        this.successfulAttempts = 0
     }
 
     buildBoard() {
@@ -144,11 +145,12 @@ class Game {
     }
 
     removeCards() {
-        //Removes cards from the board after successful attempt (two tries)
+        //Removes cards from the board chosen in last attempt (two tries); should be used after a successful attempt.
         $('.card[position="' + self.attempts[self.attempts.length-1].first_pos + '"]').slideUp() 
         $('.card[position="' + self.attempts[self.attempts.length-1].first_pos + '"]').addClass('removed')
         $('.card[position="' + self.attempts[self.attempts.length-1].second_pos + '"]').slideUp() 
         $('.card[position="' + self.attempts[self.attempts.length-1].second_pos + '"]').addClass('removed')
+        self.successfulAttempts++
     }
 
     mainPhase() {
@@ -171,13 +173,13 @@ class Game {
                 $('.card').parent().not('.layer').toggleClass('layer')  //Blocks every card for animation
 
                 setTimeout(function() {
-                    $('.card[position="' + self.attempts[self.attempts.length-1].first_pos + '"]').toggleClass('flipped')
-                    $('.card[position="' + self.attempts[self.attempts.length-1].second_pos + '"]').toggleClass('flipped')
+                    $('.card[position="' + self.attempts.slice(-1)[0].first_pos + '"]').toggleClass('flipped')
+                    $('.card[position="' + self.attempts.slice(-1)[0].second_pos + '"]').toggleClass('flipped')
 
-                    if (self.attempts[self.attempts.length-1].result) { 
+                    if (self.attempts.slice(-1)[0].result) { 
                         self.removeCards() //If attempts successful the two cards are removed from the game
 
-                        if ($('.card').not('.removed').length == 0) {//Player has cleared all the cards in the board
+                        if (2 * self.successfulAttempts == Game.nCard_per_level()[self.level]) {//Player has cleared the board
                             self.timer.stopPrintTime()
                             mess_box.html('Congratulations, you win!')
                         }
@@ -185,7 +187,7 @@ class Game {
                     $('.card').parent().toggleClass('layer')
                 }, 1000)
 
-                self.attempts[self.attempts.length-1].result ?  mess_box.html('Great!') : mess_box.html('Wrong! Try again!')
+                self.attempts.slice(-1)[0].result ?  mess_box.html('Great!') : mess_box.html('Wrong! Try again!')
             }
 
             $('#attempts').html(self.attempts.length) 
