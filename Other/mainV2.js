@@ -1,4 +1,11 @@
+console.log('main.js is working')
+console.log($)
+
+
+/** UTILITY FUNCTIONS **/
+
 function randomNumberSet(n, min, max) {
+    //Accepts integers n, min, max; and returns a set of different n integers, between min, included, and max, excluded. 
     var randomNumbers = new Set()
 
     if (isNaN(n) || n < 1 || isNaN(max) || isNaN(min)) {return -1}  // Validation
@@ -12,20 +19,18 @@ function randomNumberSet(n, min, max) {
 
 
 function shuffle(array) {
-    //Shuffling randmoly array item's position
+    //Shuffling randomly array item's position
     var m = array.length, t, i;
-    while (m) { // While there remain elements to shuffle…
-        i = Math.floor(Math.random() * m--) // Pick a remaining element…
-        t = array[m]; // And swap it with the current element.
+    while (m) { 
+        i = Math.floor(Math.random() * m--) 
+        t = array[m]; 
         array[m] = array[i]
         array[i] = t
     }
 }
 
 
-
-
-/**  CLASSES **/
+/**  CLASSES and FUNCTIONS**/
 class Card {
     constructor(value, back='?') {
         this.rank = value;
@@ -36,7 +41,6 @@ class Card {
         return n ? '<span>' + this.rank + '</span>' : '<span>' + this.back + '</span>'
     }
 }
-
 
 
 class Deck {
@@ -83,29 +87,23 @@ class Timer {
     }
 }
 
-class SingleAttempt {
-    constructor(cards, posision_first) {
-        this.cards = cards
-        this.posision_first = posision_first
-        this.rank_first = this.cards[this.posision_first].value
-        this.position_second = null
-        this.rank_second = null
-        this.result = -1
-    }
-
-    complete(position_second) {
-        this.position_second = position_second
-        this.rank_second = this.cards[position_second].rank
-        this.result = this.rank_first == this.rank_second
-    }
-}
 
 class Attempt {
+    //An attempt is made of two tries, i.e. by two element of class Card chosesn by the player. 
+    constructor(position, rank) {
+        this.first_pos = position
+        this.first_rank = rank
+        this.second_pos = null  //An istance of the class is initialize an instance when the player pick the first card, thus values for the second card are null.
+        this.second_rank = null
+        this.result = -1    //An attempts is successful (true) if both elements of class Card have equal rank. Default value is -1 for incomplite attempts. 
+    }
 
+    complete(position, rank) {
+        this.second_pos = position
+        this.second_rank = rank
+        this.result = this.first_rank == this.second_rank
+    }
 }
-
-
-
 
 
 class Game {
@@ -120,15 +118,13 @@ class Game {
 
     constructor() {
         this.level = level_inputs.filter(':checked').attr('value')
-        this.deck = new Deck(Game.nCard_per_level()[this.level])
-        this.attempts = []
+        this.deck = new Deck(Game.nCard_per_level()[this.level])      
         this.timer = new Timer
-        this.end_time
+        this.attempts = []  //List of all'attempts, an attempts being a pair of cards chosen by the player
     }
 
     buildBoard() {
-        
-        //Building a board, assigning classes, printing the deck on the board.
+        //Building a board, assigning classes, and printing the deck on the board.
         var content = '<div class="board-wrapper inline-fl-w '+ Game.boardClass_per_level()[this.level][0] + '">'
 
         for (let i = 0; i < Game.nCard_per_level()[this.level]; i++) {
@@ -140,33 +136,84 @@ class Game {
         this.deck.printDeck($('.card-up'), $('.card-down'))
     }
 
-    activatingBoard() {
+    mainPhase() {
         var self = this
+        var pendingAttempt = false  //An attempt is made of two tries, and is pending after the first try and completed after the second
 
         board.click(function() {
             self.timer.start()
             self.timer.printTime($('#time')) 
-            console.log('a')
-            board.unbind('click')   //Timer start only once
+            board.unbind('click')   //Timer starts only once
         })
 
         $('.card').click(function() {
+            var position = $(this).attr('position')
+            var rank = self.deck.cards[position].rank
+
             $(this).toggleClass('flipped')
             $(this).parent().toggleClass('layer')
 
-            var position = $(this).attr('position')
-            var value = self.deck.cards[position]
+            if (pendingAttempt) {
+                try {self.attempts[self.attempts.length-1].complete(position, rank)} catch {}
+                pendingAttempt = !pendingAttempt    //Next try shall open new attempt
+            } else {
+                self.attempts.push(new Attempt(position, rank))
+                pendingAttempt = !pendingAttempt    //Next try shall complete the attempt
+            }
 
+            if (pendingAttempt) mess_box.html('Pick another card.')
+            else {
+                $('.card').parent().not('.layer').toggleClass('layer')  //Blocks every card for animation
+
+                setTimeout(function() {
+                    $('.card[position="' + self.attempts[self.attempts.length-1].first_pos + '"]').toggleClass('flipped')
+                    $('.card[position="' + self.attempts[self.attempts.length-1].second_pos + '"]').toggleClass('flipped')
+
+                    if (self.attempts[self.attempts.length-1].result) { //If attempts successful the two cards are removed from the game
+                        $('.card[position="' + self.attempts[self.attempts.length-1].first_pos + '"]').slideUp() 
+                        $('.card[position="' + self.attempts[self.attempts.length-1].first_pos + '"]').addClass('removed')
+                        $('.card[position="' + self.attempts[self.attempts.length-1].second_pos + '"]').slideUp() 
+                        $('.card[position="' + self.attempts[self.attempts.length-1].second_pos + '"]').addClass('removed')
+                        if ($('.card').not('.removed').length == 0) self.endgame()  //Player has cleared all the cards in the board
+                    }
+                    $('.card').parent().toggleClass('layer')
+                }, 1000)
+
+                if (self.attempts[self.attempts.length-1].result) {
+                    $('#text-admin').html('Great!')
+                } else {
+                    $('#text-admin').html('Wrong! Try again!')
+                }
+            }
+
+            $('#attempts').html(self.attempts.length) 
         })
+    }
+
+    endgame() {
+        this.timer.stopPrintTime()
+        $('#text-admin').html('Congratulations, you win!')
     }
 
     start() {
         mess_box.html('Game started!<br><br>Choose a card to start the clock.')
         level_display.html(this.level)
         this.buildBoard()
-        this.activatingBoard()
+        this.mainPhase()
     }
 }
+
+
+function resetAll() {
+    try {
+        game.timer.stopPrintTime()
+        attempts.list = []
+    } catch {}
+    $('#attempts').html('0')
+    $('#time').html('00')
+    $('#board').html('')
+}
+
 
 /*******************************/
 /********* MAIN SCRITP *********/
@@ -180,17 +227,11 @@ const mess_box = $('#text-admin')
 const level_display = $('#level')
 
 
-
-
-
 /* EVENTS */
-
-
-play_button.click(function() {
-    game = new Game
-    game.start()
-});
-
-
-/*********************************************/
-
+play_button.click(
+    function() {
+        resetAll()
+        game = new Game
+        game.start()
+    }
+)

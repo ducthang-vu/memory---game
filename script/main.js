@@ -190,7 +190,6 @@ function startGame() {
     board.click(function() {
         self.timer.start()
         self.timer.printTime($('#time')) 
-        console.log('a')
         board.unbind('click')   //Timer start only once
     })
 
