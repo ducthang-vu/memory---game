@@ -18,27 +18,34 @@
             </button>
         </div>
 
-        <div class="input-box text-right">
-            <div class="input-box-inner">
-                <input id="level_1" name="level" type="radio" value="1" checked/>
-                <label for="level_1">Level 1</label>
+        <div class="right-header flex-nw">
+            <div class="input-box">
+                <div class="input-box-inner">
+                    <input id="level_1" name="level" type="radio" value="1" checked/>
+                    <label for="level_1">Level 1</label>
+                </div>
+        
+                <div class="input-box-inner">
+                    <input id="level_2"  name="level" type="radio" value="2" />
+                    <label for="level_2">Level 2</label>
+                </div>  
+        
+                <div class="input-box-inner">
+                    <input id="level_3"  name="level" type="radio" value="3" />
+                    <label for="level_3">Level 3</label>
+                </div>   
+        
+                <div class="input-box-inner">
+                    <input id="level_4"  name="level" type="radio" value="4" />
+                    <label for="level_3">Level 4</label>
+                </div>   
             </div>
-    
-            <div class="input-box-inner">
-                <input id="level_2"  name="level" type="radio" value="2" />
-                <label for="level_2">Level 2</label>
-            </div>  
-    
-            <div class="input-box-inner">
-                <input id="level_3"  name="level" type="radio" value="3" />
-                <label for="level_3">Level 3</label>
-            </div>   
-    
-            <div class="input-box-inner">
-                <input id="level_4"  name="level" type="radio" value="4" />
-                <label for="level_3">Level 4</label>
-            </div>   
-        </div>
+
+            
+            <button id="volume-button" class="in-block">
+                <i id="icon-volume" class="fas fa-volume-up"></i>
+                <i id="icon-switch" class="fas fa-toggle-on darkgreen-color"></i>
+            </button>
         </div>
     </header>
 
@@ -91,8 +98,13 @@
         </div>   
     </footer>
 
+    <audio id="audio-bleep" src="bleep.mp3"></audio>
+    <audio id="audio-success" src="success.mp3"></audio>
+    <audio id="audio-victory" src="victory.mp3"></audio>
+
     <!-- SCRIPT -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://kit.fontawesome.com/89ef06fff6.js" crossorigin="anonymous"></script>
     <script src="script/main.js"></script>
 </body>
 </html>

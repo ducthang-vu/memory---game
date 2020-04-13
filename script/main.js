@@ -111,14 +111,19 @@ class Game {
         ['board_size1', 'scene_size1'], 
         ['board_size2', 'scene_size2'], 
         ['board_size3', 'scene_size3'], 
-        ['board_size1', 'scene_size4']
-    ]}
+        ['board_size1', 'scene_size4']]
+    }
     static messages() {return {
         'start': 'Game started!<br><br>Choose a card to start the clock.',
         'invitesComplete': 'Pick another card.',
         'successAttempt': 'Great!',
         'failedAttempt': 'Wrong! Try again!',
         'win': 'Congratulations, you win!'}
+    }
+    static sound() {return {
+        'bleep': audioBleep,
+        'success': audioSuccess,
+        'victory': audioVictory,}
     }
 
     constructor() {
@@ -144,11 +149,12 @@ class Game {
     }
 
     activateTimer() {
-        board.click(
+        board.children().click(
             function() {
                 self.timer.start()
                 self.timer.printTime($('#time')) 
-                board.unbind('click')   //Timer starts only once
+                self.triggerAudio('bleep')
+                board.children().unbind('click')   //Timer starts only once
             }
         )
     }
@@ -162,6 +168,10 @@ class Game {
         $('.card[position="' + self.attempts[self.attempts.length-1].first_pos + '"]').slideUp() 
         $('.card[position="' + self.attempts[self.attempts.length-1].second_pos + '"]').slideUp() 
         self.successfulAttempts++
+    }
+
+    triggerAudio(kind){
+        if (activeAudio) Game.sound()[kind].play()
     }
 
     mainPhase() {
@@ -184,10 +194,12 @@ class Game {
 
                     if (self.attempts.slice(-1)[0].result) { 
                         self.removeCards() //If attempts successful the two cards are removed from the game
+                        self.triggerAudio('success')
 
                         if (2 * self.successfulAttempts == Game.nCard_per_level()[self.level]) {//Player has cleared the board
                             self.timer.stopPrintTime()
                             self.messageUser('win')
+                            self.triggerAudio('victory')
                         }
                     }
                 $('.card').parent().toggleClass('layer')
@@ -218,6 +230,7 @@ class Game {
 
     start() {
         this.messageUser('start')
+        self.triggerAudio('bleep')
         level_display.html(this.level)
         this.buildBoard()
         this.activateTimer()
@@ -238,6 +251,14 @@ function resetAll() {
 }
 
 
+function switchVolume() {
+    activeAudio = !activeAudio
+    $('#icon-volume').toggleClass('fa-volume-up fa-volume-mute')
+    $('#icon-switch').toggleClass('fa-toggle-on fa-toggle-off')
+    $('#icon-switch').toggleClass('darkgreen-color darkred-color')
+}
+
+
 /***************************************/
 /********* --- MAIN SCRITP --- *********/
 /***************************************/
@@ -248,9 +269,17 @@ const play_button = $('#play-button')
 const level_inputs = $('input[name="level"]')
 const mess_box = $('#text-admin')
 const level_display = $('#level')
+const audioBleep = document.getElementById('audio-bleep')
+const audioSuccess = document.getElementById('audio-success')
+const audioVictory = document.getElementById('audio-victory')
+
+const volume_button = $('#volume-button')
+var activeAudio = true
 
 
 /* EVENTS */
+volume_button.click(switchVolume)
+
 play_button.click(
     function() {
         resetAll()

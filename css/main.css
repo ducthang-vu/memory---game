@@ -71,7 +71,15 @@ button {
 }
 
 .green {
-    background: green;
+    background: darkgreen;
+}
+
+.darkgreen-color{
+    color: darkgreen;
+}
+
+.darkred-color {
+    color: darkred;
 }
 
 .white-color {
@@ -96,7 +104,38 @@ button {
             font-size: 150%;
         }
 
+        .right-header {
+            justify-content: flex-end;
+            align-items: center;
+        }
 
+            #volume-button,
+            #volume-button:focus {
+                width: 50px;
+                padding: 0;
+                background: inherit;
+                color: inherit;
+                border: 0;
+                outline: 0;
+            }
+
+                #volume-button > * {
+                    display: block;
+                }
+
+                #icon-volume {
+                    padding: 5px;
+                    font-size: 200%;
+                }
+
+                #icon-switch {
+                    font-size: 200%;
+                }
+
+            .input-box {
+                margin-right: 15px;
+            }
+    
 /* MAIN */
 main {
     padding-top: 25px;
