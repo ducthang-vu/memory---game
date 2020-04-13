@@ -109,10 +109,6 @@ label {
     color: #fff
 }
 
-.hidden {
-    display: none;
-}
-
 
 /* HEADER */
 .header .container {
@@ -127,7 +123,6 @@ label {
 
     header .center-header {
         flex-basis: 100%;
-        order: 1;
     }
 
         .link-github {
@@ -364,26 +359,31 @@ footer .rules {
 
         /* MAIN */
         main .container {
-            max-width: 100%;
+            width: 100%;
+            margin-right: 0;
+            margin-left: 0;
+            padding-right: 0;
+            padding-left: 0;
         }
 
             /* Main: BOARD */
             .board_size1,
             .board_size2,
-            .board_size3{
-                width: 252px !important;
-                font-size: 50%;
+            .board_size3 {
+                width: 320px !important;
+                font-size: 120%;
             }
         
                 .scene_size1 {
-                    width: 50px !important;
-                    height: 50px !important;
+                    width: 79.5px !important;
+                    height: 79.5px !important;
                 }
+
                 .scene_size2,
                 .scene_size3,
                 .scene_size4 {
-                    width: 50px !important;
-                    height: 50px !important;
+                    width: 39.75px !important;
+                    height: 39.75px !important;
                 }
 }
 
@@ -394,10 +394,11 @@ footer .rules {
         flex-basis: calc(100% / 3)
     }
 
-        header .center-header {
-            order: 0;
+        header .right-header {
+            order: 1;
         }
 
+        
     /* Main: BOARD-SECTION */
     .board_size1 {
         width: 402px;
