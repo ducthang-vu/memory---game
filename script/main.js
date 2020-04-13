@@ -180,9 +180,9 @@ class Game {
                 }, 1000)
 
                 if (self.attempts[self.attempts.length-1].result) {
-                    $('#text-admin').html('Great!')
+                    mess_box.html('Great!')
                 } else {
-                    $('#text-admin').html('Wrong! Try again!')
+                    mess_box.html('Wrong! Try again!')
                 }
             }
 
@@ -192,7 +192,7 @@ class Game {
 
     endgame() {
         this.timer.stopPrintTime()
-        $('#text-admin').html('Congratulations, you win!')
+        mess_box.html('Congratulations, you win!')
     }
 
     start() {
