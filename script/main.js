@@ -154,12 +154,11 @@ class Game {
     }
 
     activateTimer() {
-        board.children().click(
-            function() {
-                self.timer.start()
-                self.timer.printTime($('#time')) 
-                self.triggerAudio('bleep')
-                board.children().unbind('click')   //Timer starts only once
+        board.children().click(() => {
+            self.timer.start()
+            self.timer.printTime($('#time')) 
+            self.triggerAudio('bleep')
+            board.children().unbind('click')   //Timer starts only once
             }
         )
     }
@@ -193,22 +192,21 @@ class Game {
             {try {self.attempts[self.attempts.length-1].complete(position, rank)} catch {}} 
             $('.card').parent().not('.layer').toggleClass('layer')  //Blocks every card for animation
 
-            setTimeout(
-                function() {
-                    if (self.attempts.slice(-1)[0].result) { 
-                        self.removeCards() //If attempts successful the two cards are removed from the game
-                        self.triggerAudio('success')
+            setTimeout(()=> {
+                if (self.attempts.slice(-1)[0].result) { 
+                    self.removeCards() //If attempts successful the two cards are removed from the game
+                    self.triggerAudio('success')
 
-                        if (2 * self.successfulAttempts == Game.nCard_per_level()[self.level]) {    //Player has cleared the board
-                            self.timer.stopPrintTime()
-                            self.messageUser('win')
-                            self.triggerAudio('victory')
-                        }
+                    if (2 * self.successfulAttempts == Game.nCard_per_level()[self.level]) {    //Player has cleared the board
+                        self.timer.stopPrintTime()
+                        self.messageUser('win')
+                        self.triggerAudio('victory')
                     }
+                }
 
-                    $('.card[position="' + self.attempts.slice(-1)[0].first_pos + '"]').toggleClass('flipped')
-                    $('.card[position="' + self.attempts.slice(-1)[0].second_pos + '"]').toggleClass('flipped')
-                    $('.card').parent().toggleClass('layer')    //The board is reactivated
+                $('.card[position="' + self.attempts.slice(-1)[0].first_pos + '"]').toggleClass('flipped')
+                $('.card[position="' + self.attempts.slice(-1)[0].second_pos + '"]').toggleClass('flipped')
+                $('.card').parent().toggleClass('layer')    //The board is reactivated
                 }, 
                 1000
             )
@@ -236,7 +234,7 @@ class Game {
 
     start() {
         this.messageUser('start')
-        self.triggerAudio('bleep')
+        this.triggerAudio('bleep')
         level_display.html(this.level)
         this.buildBoard()
         this.activateTimer()
