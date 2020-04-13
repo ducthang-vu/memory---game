@@ -295,10 +295,9 @@ var activeAudio = true
 volume_button.click(switchVolume)
 info_button.click(showInfo)
 
-play_button.click(
-    function() {
-        resetAll()
-        game = new Game
-        game.start()
+play_button.click(() => {
+    resetAll()
+    game = new Game
+    game.start()
     }
 )
