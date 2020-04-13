@@ -10,9 +10,7 @@ function randomNumberSet(n, min, max) {
 
     if (isNaN(n) || n < 1 || isNaN(max) || isNaN(min)) {return -1}  // Validation
 
-    while (randomNumbers.size < n) {
-        randomNumbers.add(Math.floor(Math.random() * (max - min)) + min)
-    }
+    while (randomNumbers.size < n) randomNumbers.add(Math.floor(Math.random() * (max - min)) + min)
     
     return randomNumbers
 }
@@ -117,6 +115,7 @@ class Game {
     ]}
 
     constructor() {
+        self = this
         this.level = level_inputs.filter(':checked').attr('value')
         this.deck = new Deck(Game.nCard_per_level()[this.level])      
         this.timer = new Timer
@@ -136,30 +135,36 @@ class Game {
         this.deck.printDeck($('.card-up'), $('.card-down'))
     }
 
-    mainPhase() {
-        var self = this
-        var pendingAttempt = false  //An attempt is made of two tries, and is pending after the first try and completed after the second
-
+    activateTimer() {
         board.click(function() {
             self.timer.start()
             self.timer.printTime($('#time')) 
             board.unbind('click')   //Timer starts only once
         })
+    }
+
+    removeCards() {
+        //Removes cards from the board after successful attempt (two tries)
+        $('.card[position="' + self.attempts[self.attempts.length-1].first_pos + '"]').slideUp() 
+        $('.card[position="' + self.attempts[self.attempts.length-1].first_pos + '"]').addClass('removed')
+        $('.card[position="' + self.attempts[self.attempts.length-1].second_pos + '"]').slideUp() 
+        $('.card[position="' + self.attempts[self.attempts.length-1].second_pos + '"]').addClass('removed')
+    }
+
+    mainPhase() {
+        var pendingAttempt = false  //An attempt is made of two tries, and is pending after the first try and completed after the second
 
         $('.card').click(function() {
             var position = $(this).attr('position')
             var rank = self.deck.cards[position].rank
 
             $(this).toggleClass('flipped')
-            $(this).parent().toggleClass('layer')
+            $(this).parent().toggleClass('layer') //Blocks card from being clicked again in the next try
 
-            if (pendingAttempt) {
-                try {self.attempts[self.attempts.length-1].complete(position, rank)} catch {}
-                pendingAttempt = !pendingAttempt    //Next try shall open new attempt
-            } else {
-                self.attempts.push(new Attempt(position, rank))
-                pendingAttempt = !pendingAttempt    //Next try shall complete the attempt
-            }
+            if (pendingAttempt) {try {self.attempts[self.attempts.length-1].complete(position, rank)} catch {}} 
+            else {self.attempts.push(new Attempt(position, rank))}
+
+            pendingAttempt = !pendingAttempt
 
             if (pendingAttempt) mess_box.html('Pick another card.')
             else {
@@ -169,11 +174,9 @@ class Game {
                     $('.card[position="' + self.attempts[self.attempts.length-1].first_pos + '"]').toggleClass('flipped')
                     $('.card[position="' + self.attempts[self.attempts.length-1].second_pos + '"]').toggleClass('flipped')
 
-                    if (self.attempts[self.attempts.length-1].result) { //If attempts successful the two cards are removed from the game
-                        $('.card[position="' + self.attempts[self.attempts.length-1].first_pos + '"]').slideUp() 
-                        $('.card[position="' + self.attempts[self.attempts.length-1].first_pos + '"]').addClass('removed')
-                        $('.card[position="' + self.attempts[self.attempts.length-1].second_pos + '"]').slideUp() 
-                        $('.card[position="' + self.attempts[self.attempts.length-1].second_pos + '"]').addClass('removed')
+                    if (self.attempts[self.attempts.length-1].result) { 
+                        self.removeCards() //If attempts successful the two cards are removed from the game
+
                         if ($('.card').not('.removed').length == 0) {//Player has cleared all the cards in the board
                             self.timer.stopPrintTime()
                             mess_box.html('Congratulations, you win!')
@@ -182,11 +185,7 @@ class Game {
                     $('.card').parent().toggleClass('layer')
                 }, 1000)
 
-                if (self.attempts[self.attempts.length-1].result) {
-                    mess_box.html('Great!')
-                } else {
-                    mess_box.html('Wrong! Try again!')
-                }
+                self.attempts[self.attempts.length-1].result ?  mess_box.html('Great!') : mess_box.html('Wrong! Try again!')
             }
 
             $('#attempts').html(self.attempts.length) 
@@ -197,6 +196,7 @@ class Game {
         mess_box.html('Game started!<br><br>Choose a card to start the clock.')
         level_display.html(this.level)
         this.buildBoard()
+        this.activateTimer()
         this.mainPhase()
     }
 }
