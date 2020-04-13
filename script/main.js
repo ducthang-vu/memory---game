@@ -174,7 +174,10 @@ class Game {
                         $('.card[position="' + self.attempts[self.attempts.length-1].first_pos + '"]').addClass('removed')
                         $('.card[position="' + self.attempts[self.attempts.length-1].second_pos + '"]').slideUp() 
                         $('.card[position="' + self.attempts[self.attempts.length-1].second_pos + '"]').addClass('removed')
-                        if ($('.card').not('.removed').length == 0) self.endgame()  //Player has cleared all the cards in the board
+                        if ($('.card').not('.removed').length == 0) {//Player has cleared all the cards in the board
+                            self.timer.stopPrintTime()
+                            mess_box.html('Congratulations, you win!')
+                        }
                     }
                     $('.card').parent().toggleClass('layer')
                 }, 1000)
@@ -188,11 +191,6 @@ class Game {
 
             $('#attempts').html(self.attempts.length) 
         })
-    }
-
-    endgame() {
-        this.timer.stopPrintTime()
-        mess_box.html('Congratulations, you win!')
     }
 
     start() {
