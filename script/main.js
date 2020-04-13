@@ -106,6 +106,7 @@ class Attempt {
 
 class Game {
     static nCard_per_level() {return [null, 16, 32, 48, 64]}
+
     static boardClass_per_level()  {return [
         null, 
         ['board_size1', 'scene_size1'], 
@@ -113,6 +114,7 @@ class Game {
         ['board_size3', 'scene_size3'], 
         ['board_size1', 'scene_size4']]
     }
+
     static messages() {return {
         'start': 'Game started!<br><br>Choose a card to start the clock.',
         'invitesComplete': 'Pick another card.',
@@ -120,6 +122,7 @@ class Game {
         'failedAttempt': 'Wrong! Try again!',
         'win': 'Congratulations, you win!'}
     }
+
     static sound() {return {
         'bleep': audioBleep,
         'success': audioSuccess,
@@ -146,6 +149,8 @@ class Game {
         board.html(content + '</div>')
 
         this.deck.printDeck($('.card-up'), $('.card-down'))
+
+        board.slideDown('slow')
     }
 
     activateTimer() {
@@ -182,6 +187,7 @@ class Game {
             self.messageUser('invitesComplete')
         }
 
+
         function completeAttempt(position, rank) {
             // The player is compliting a pending attempt, by picking the second card (second try)
             {try {self.attempts[self.attempts.length-1].complete(position, rank)} catch {}} 
@@ -189,9 +195,6 @@ class Game {
 
             setTimeout(
                 function() {
-                    $('.card[position="' + self.attempts.slice(-1)[0].first_pos + '"]').toggleClass('flipped')
-                    $('.card[position="' + self.attempts.slice(-1)[0].second_pos + '"]').toggleClass('flipped')
-
                     if (self.attempts.slice(-1)[0].result) { 
                         self.removeCards() //If attempts successful the two cards are removed from the game
                         self.triggerAudio('success')
@@ -202,7 +205,10 @@ class Game {
                             self.triggerAudio('victory')
                         }
                     }
-                $('.card').parent().toggleClass('layer')
+
+                    $('.card[position="' + self.attempts.slice(-1)[0].first_pos + '"]').toggleClass('flipped')
+                    $('.card[position="' + self.attempts.slice(-1)[0].second_pos + '"]').toggleClass('flipped')
+                    $('.card').parent().toggleClass('layer')    //The board is reactivated
                 }, 
                 1000
             )
@@ -245,9 +251,11 @@ function resetAll() {
         game.timer.stopPrintTime()
         attempts.list = []
     } catch {}
+
     $('#attempts').html('0')
     $('#time').html('00')
     board.html('')
+    board.hide()
 }
 
 
