@@ -165,11 +165,13 @@ main {
         .scene_size2 {
             width: 75px;
             height: 75px;
+            font-size: 150%;
         }
 
         .scene_size3 {
             width: 65px;
             height: 65px;
+            font-size: 120%;
         }
 
         .scene_size4 {
@@ -233,6 +235,5 @@ main {
 /* FOOTER  */
 footer {
     font-style: italic;
-    font-size: 5px;
-    height: 28px;
+    font-size: 50%;
 }
