@@ -113,6 +113,13 @@ class Game {
         ['board_size3', 'scene_size3'], 
         ['board_size1', 'scene_size4']
     ]}
+    static messages() {return {
+        'start': 'Game started!<br><br>Choose a card to start the clock.',
+        'invitesComplete': 'Pick another card.',
+        'successAttempt': 'Great!',
+        'failedAttempt': 'Wrong! Try again!',
+        'win': 'Congratulations, you win!'}
+    }
 
     constructor() {
         self = this
@@ -137,11 +144,17 @@ class Game {
     }
 
     activateTimer() {
-        board.click(function() {
-            self.timer.start()
-            self.timer.printTime($('#time')) 
-            board.unbind('click')   //Timer starts only once
-        })
+        board.click(
+            function() {
+                self.timer.start()
+                self.timer.printTime($('#time')) 
+                board.unbind('click')   //Timer starts only once
+            }
+        )
+    }
+
+    messageUser(kind) {
+        mess_box.html(Game.messages()[kind])
     }
 
     removeCards() {
@@ -152,25 +165,20 @@ class Game {
     }
 
     mainPhase() {
-        var pendingAttempt = false  //An attempt is made of two tries, and is pending after the first try and completed after the second
+        /* MAIN PHASE FUNCTION */
+        function newAttempt(position, rank) {
+            //The player has started a new attempt, by picking the first card (first try)
+            self.attempts.push(new Attempt(position, rank))
+            self.messageUser('invitesComplete')
+        }
 
-        $('.card').click(function() {
-            var position = $(this).attr('position')
-            var rank = self.deck.cards[position].rank
+        function completeAttempt(position, rank) {
+            // The player is compliting a pending attempt, by picking the second card (second try)
+            {try {self.attempts[self.attempts.length-1].complete(position, rank)} catch {}} 
+            $('.card').parent().not('.layer').toggleClass('layer')  //Blocks every card for animation
 
-            $(this).toggleClass('flipped')
-            $(this).parent().toggleClass('layer') //Blocks card from being clicked again in the next try
-
-            if (pendingAttempt) {try {self.attempts[self.attempts.length-1].complete(position, rank)} catch {}} 
-            else {self.attempts.push(new Attempt(position, rank))}
-
-            pendingAttempt = !pendingAttempt
-
-            if (pendingAttempt) mess_box.html('Pick another card.')
-            else {
-                $('.card').parent().not('.layer').toggleClass('layer')  //Blocks every card for animation
-
-                setTimeout(function() {
+            setTimeout(
+                function() {
                     $('.card[position="' + self.attempts.slice(-1)[0].first_pos + '"]').toggleClass('flipped')
                     $('.card[position="' + self.attempts.slice(-1)[0].second_pos + '"]').toggleClass('flipped')
 
@@ -179,21 +187,37 @@ class Game {
 
                         if (2 * self.successfulAttempts == Game.nCard_per_level()[self.level]) {//Player has cleared the board
                             self.timer.stopPrintTime()
-                            mess_box.html('Congratulations, you win!')
+                            self.messageUser('win')
                         }
                     }
-                    $('.card').parent().toggleClass('layer')
-                }, 1000)
+                $('.card').parent().toggleClass('layer')
+                }, 
+                1000
+            )
 
-                self.attempts.slice(-1)[0].result ?  mess_box.html('Great!') : mess_box.html('Wrong! Try again!')
-            }
+            self.attempts.slice(-1)[0].result ?  self.messageUser('successAttempt') : self.messageUser('failedAttempt')
+        }
 
+
+        /* MAIN PHASE SCRIPT */
+        var pendingAttempt = false  //An attempt is made of two tries, and is pending after the first try and completed after the second
+    
+        $('.card').click(function() {
+            var position = $(this).attr('position')
+            var rank = self.deck.cards[position].rank
+    
+            $(this).toggleClass('flipped')
+            $(this).parent().toggleClass('layer') //Blocks card from being clicked again in the next try
+    
+            pendingAttempt ? completeAttempt(position, rank) : newAttempt(position, rank)
+    
+            pendingAttempt = !pendingAttempt
             $('#attempts').html(self.attempts.length) 
         })
     }
 
     start() {
-        mess_box.html('Game started!<br><br>Choose a card to start the clock.')
+        this.messageUser('start')
         level_display.html(this.level)
         this.buildBoard()
         this.activateTimer()
@@ -203,19 +227,20 @@ class Game {
 
 
 function resetAll() {
+    // Resets clock and messages boxes; should be used when player starts a new game.
     try {
         game.timer.stopPrintTime()
         attempts.list = []
     } catch {}
     $('#attempts').html('0')
     $('#time').html('00')
-    $('#board').html('')
+    board.html('')
 }
 
 
-/*******************************/
-/********* MAIN SCRITP *********/
-/*******************************/
+/***************************************/
+/********* --- MAIN SCRITP --- *********/
+/***************************************/
 
 /* GLOBAL VARIABLE */
 const board = $('#board')
