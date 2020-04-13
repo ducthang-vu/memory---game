@@ -199,7 +199,7 @@ class Game {
                         self.removeCards() //If attempts successful the two cards are removed from the game
                         self.triggerAudio('success')
 
-                        if (2 * self.successfulAttempts == Game.nCard_per_level()[self.level]) {//Player has cleared the board
+                        if (2 * self.successfulAttempts == Game.nCard_per_level()[self.level]) {    //Player has cleared the board
                             self.timer.stopPrintTime()
                             self.messageUser('win')
                             self.triggerAudio('victory')
