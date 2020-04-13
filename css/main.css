@@ -167,7 +167,7 @@ label {
             .input-box {
                 margin-right: 15px;
             }
-    
+
 
 /* MAIN */
 main {
@@ -359,7 +359,7 @@ footer .rules {
 
         /* MAIN */
         main .container {
-            width: 100%;
+            min-width: 100%;
             margin-right: 0;
             margin-left: 0;
             padding-right: 0;
