@@ -314,6 +314,7 @@ footer .rules {
     transform: translate(0%, -100%);
     padding: 10px;
     width: 800px;
+    max-width: 90%;
     background: gray;
     border: 1px solid #fff;
     font-size: 90%;
