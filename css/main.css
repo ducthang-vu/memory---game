@@ -99,6 +99,12 @@ button {
     .header .container > * {
         flex-basis: calc(100% / 3)
     }
+        .link-github {
+            margin-left: 15px;
+            background: inherit;
+            color: inherit;
+            font-size: 250%;
+        }
 
         .play-button {
             font-size: 150%;
