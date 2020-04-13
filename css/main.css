@@ -312,7 +312,7 @@ main {
 
     .main-footer .info-button {
         padding: 0;
-        font-size: 150%;
+        font-size: 120%;
         border: 0;
     }
 
@@ -322,10 +322,10 @@ main {
     }
 
 footer .rules {
-    top: 10px;
+    top: 0px;
     left: 10px;
     transform: translate(0%, -100%);
-    padding: 5px;
+    padding: 10px;
     width: 800px;
     background: gray;
     border: 1px solid #fff;
@@ -335,3 +335,11 @@ footer .rules {
     footer .rules > p {
         margin-bottom: 15px;
     }
+
+
+@media screen and (max-height: 590px) {
+    footer .container {
+        padding-top: 0;
+        padding-bottom: 0;
+    }
+}
