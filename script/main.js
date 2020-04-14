@@ -266,9 +266,9 @@ function showInfo() {
 
 function switchVolume() {
     activeAudio = !activeAudio
-    $('#icon-volume').toggleClass('fa-volume-up fa-volume-mute')
-    $('#icon-switch').toggleClass('fa-toggle-on fa-toggle-off')
-    $('#icon-switch').toggleClass('darkgreen-color darkred-color')
+    icon_volume.toggleClass('fa-volume-up fa-volume-mute')
+    icon_switch.toggleClass('fa-toggle-on fa-toggle-off')
+    icon_switch.toggleClass('darkgreen-color darkred-color')
 }
 
 
@@ -288,6 +288,8 @@ const audioSuccess = document.getElementById('audio-success')
 const audioVictory = document.getElementById('audio-victory')
 const info_button = $('#info-button')
 const volume_button = $('#volume-button')
+const icon_switch = $('#icon-switch')
+const icon_volume = $('#icon-volume')
 var activeAudio = true
 
 
