@@ -120,12 +120,12 @@ class Game {
         'invitesComplete': 'Pick another card.',
         'successAttempt': 'Great!',
         'failedAttempt': 'Wrong! Try again!',
-        'win': 'Congratulations, you win!'}
+        'victory': 'Congratulations, you win!'}
     }
 
     static sound() {return {
         'bleep': audioBleep,
-        'success': audioSuccess,
+        'successAttempt': audioSuccess,
         'victory': audioVictory,}
     }
 
@@ -195,11 +195,11 @@ class Game {
             setTimeout(()=> {
                 if (self.attempts.slice(-1)[0].result) { 
                     self.removeCards() //If attempts successful the two cards are removed from the game
-                    self.triggerAudio('success')
+                    self.triggerAudio('successAttempt')
 
                     if (2 * self.successfulAttempts == Game.nCard_per_level()[self.level]) {    //Player has cleared the board
                         self.timer.stopPrintTime()
-                        self.messageUser('win')
+                        self.messageUser('victory')
                         self.triggerAudio('victory')
                     }
                 }
