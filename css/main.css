@@ -249,10 +249,6 @@ main {
                 border: 1px solid lightgray;
             }
 
-            .card:hover {
-                opacity: 0.8;
-            }
-
                 .card-face{
                     display: flex;
                     justify-content: center;
@@ -266,23 +262,23 @@ main {
                     backface-visibility: hidden;
                 }
 
-                .card-up {
-                    background: green;
-                    transform: rotateY(180deg);
-                }
-
-                .card-down {
-                    font-size: 120%;
-                    background: darkred;
-                }
-
                 .card.flipped {
                     transform: rotateY(180deg);
                 }
 
-                .card.blocked {
-                    background: #000;
-                }
+                    .card-up {
+                        background: green;
+                        transform: rotateY(180deg);
+                    }
+
+                    .card-down {
+                        font-size: 120%;
+                        background: darkred;
+                    }
+
+                    .card-down:hover {
+                        background: rgba(139, 0, 0, 0.8);
+                    }
 
 
         .layer::after {
