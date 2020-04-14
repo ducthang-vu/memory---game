@@ -137,6 +137,16 @@ class Game {
         this.attempts = []  //List of all'attempts, an attempts being a pair of cards chosen by the player
         this.successfulAttempts = 0
     }
+    
+    activateTimer() {
+        board.children().click(() => {
+            self.timer.start()
+            self.timer.printTime($('#time')) 
+            self.triggerAudio('bleep')
+            board.children().unbind('click')   //Timer starts only once
+            }
+        )
+    }
 
     buildBoard() {
         //Building a board, assigning classes, and printing the deck on the board.
@@ -151,16 +161,6 @@ class Game {
         this.deck.printDeck($('.card-up'), $('.card-down'))
 
         board.slideDown('slow')
-    }
-
-    activateTimer() {
-        board.children().click(() => {
-            self.timer.start()
-            self.timer.printTime($('#time')) 
-            self.triggerAudio('bleep')
-            board.children().unbind('click')   //Timer starts only once
-            }
-        )
     }
 
     messageUser(kind) {
@@ -179,7 +179,7 @@ class Game {
     }
 
     mainPhase() {
-        /* MAIN PHASE FUNCTION */
+        /* MAIN PHASE FUNCTIONs */
         function newAttempt(position, rank) {
             //The player has started a new attempt, by picking the first card (first try)
             self.attempts.push(new Attempt(position, rank))
