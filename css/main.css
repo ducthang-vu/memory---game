@@ -249,6 +249,10 @@ main {
                 border: 1px solid lightgray;
             }
 
+            .card:hover {
+                opacity: 0.8;
+            }
+
                 .card-face{
                     display: flex;
                     justify-content: center;
