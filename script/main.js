@@ -257,6 +257,13 @@ function resetAll() {
 }
 
 
+function showInfo() {
+    $('#rules').toggle()
+    info_button.toggleClass('darkred-color')
+    info_button.children().toggleClass('fa-question-circle fa-window-close')
+} 
+
+
 function switchVolume() {
     activeAudio = !activeAudio
     $('#icon-volume').toggleClass('fa-volume-up fa-volume-mute')
@@ -265,11 +272,6 @@ function switchVolume() {
 }
 
 
-function showInfo() {
-    $('#rules').toggle()
-    info_button.toggleClass('darkred-color')
-    info_button.children().toggleClass('fa-question-circle fa-window-close')
-} 
 
 /***************************************/
 /********* --- MAIN SCRITP --- *********/
