@@ -266,19 +266,19 @@ main {
                     transform: rotateY(180deg);
                 }
 
-                    .card-up {
-                        background: green;
-                        transform: rotateY(180deg);
-                    }
+                .card-up {
+                    background: green;
+                    transform: rotateY(180deg);
+                }
 
-                    .card-down {
-                        font-size: 120%;
-                        background: darkred;
-                    }
+                .card-down {
+                    font-size: 120%;
+                    background: darkred;
+                }
 
-                    .card-down:hover {
-                        background: rgba(139, 0, 0, 0.8);
-                    }
+                .card-down:hover {
+                    background: rgba(139, 0, 0, 0.8);
+                }
 
 
         .layer::after {
