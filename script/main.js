@@ -141,7 +141,7 @@ class Game {
     activateTimer() {
         board.children().click(() => {
             self.timer.start()
-            self.timer.printTime($('#time')) 
+            self.timer.printTime(time_span) 
             self.triggerAudio('bleep')
             board.children().unbind('click')   //Timer starts only once
             }
@@ -228,7 +228,7 @@ class Game {
             pendingAttempt ? completeAttempt(position, rank) : newAttempt(position, rank)
     
             pendingAttempt = !pendingAttempt
-            $('#attempts').html(self.attempts.length) 
+            attempts_display.html(self.attempts.length) 
         })
     }
 
@@ -250,15 +250,15 @@ function resetAll() {
         attempts.list = []
     } catch {}
 
-    $('#attempts').html('0')
-    $('#time').html('00')
+    attempts_display.html('0')
+    time_span.html('00')
     board.html('')
     board.hide()
 }
 
 
 function showInfo() {
-    $('#rules').toggle()
+    rules_box.toggle()
     info_button.toggleClass('darkred-color')
     info_button.children().toggleClass('fa-question-circle fa-window-close')
 } 
@@ -278,18 +278,22 @@ function switchVolume() {
 /***************************************/
 
 /* GLOBAL VARIABLE */
-const board = $('#board')
-const play_button = $('#play-button')
-const level_inputs = $('input[name="level"]')
-const mess_box = $('#text-admin')
-const level_display = $('#level')
+const attempts_display = $('#attempts')
 const audioBleep = document.getElementById('audio-bleep')
 const audioSuccess = document.getElementById('audio-success')
 const audioVictory = document.getElementById('audio-victory')
-const info_button = $('#info-button')
-const volume_button = $('#volume-button')
+const board = $('#board')
 const icon_switch = $('#icon-switch')
 const icon_volume = $('#icon-volume')
+const info_button = $('#info-button')
+const level_display = $('#level')
+const level_inputs = $('input[name="level"]')
+const mess_box = $('#text-admin')
+const play_button = $('#play-button')
+const rules_box = $('#rules')
+const time_span = $('#time')
+const volume_button = $('#volume-button')
+
 var activeAudio = true
 
 
