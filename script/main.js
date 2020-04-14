@@ -141,7 +141,7 @@ class Game {
     activateTimer() {
         board.children().click(() => {
             self.timer.start()
-            self.timer.printTime(time_span) 
+            self.timer.printTime(time_display) 
             self.triggerAudio('bleep')
             board.children().unbind('click')   //Timer starts only once
             }
@@ -251,7 +251,7 @@ function resetAll() {
     } catch {}
 
     attempts_display.html('0')
-    time_span.html('00')
+    time_display.html('00')
     board.html('')
     board.hide()
 }
@@ -291,7 +291,7 @@ const level_inputs = $('input[name="level"]')
 const mess_box = $('#text-admin')
 const play_button = $('#play-button')
 const rules_box = $('#rules')
-const time_span = $('#time')
+const time_display = $('#time')
 const volume_button = $('#volume-button')
 
 var activeAudio = true
