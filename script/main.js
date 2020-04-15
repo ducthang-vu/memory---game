@@ -17,7 +17,7 @@ function randomNumberSet(n, min, max) {
 
 
 function shuffle(array) {
-    //Shuffling randomly array item's position
+    //Shuffling randomly array item's positions
     var m = array.length, t, i;
     while (m) { 
         i = Math.floor(Math.random() * m--) 
@@ -42,7 +42,7 @@ class Card {
 
 
 class Deck {
-    // A deck of n/2 pairs of cards, bearing the cards of each card the same random rank from 10 to 99, both included.
+    // A deck of n/2 pairs of cards of same rank; each pair having a different and random rank from 10 to 99, both included.
     constructor(n) {
         this.cards = []
         for (let number of randomNumberSet(n/2, 10, 100)) {
@@ -87,11 +87,11 @@ class Timer {
 
 
 class Attempt {
-    //An attempt is made of two tries, i.e. by two element of class Card chosesn by the player. 
+    //An attempt is made of two tries, i.e. by two elements of class Card chosen by the player. 
     constructor(position, rank) {
         this.first_pos = position
         this.first_rank = rank
-        this.second_pos = null  //An istance of the class is initialize an instance when the player pick the first card, thus values for the second card are null.
+        this.second_pos = null  //An istance of the class is initialized when the player pick the first card, thus values for the second card are null.
         this.second_rank = null
         this.result = -1    //An attempts is successful (true) if both elements of class Card have equal rank. Default value is -1 for incomplite attempts. 
     }
