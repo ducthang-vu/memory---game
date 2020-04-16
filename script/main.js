@@ -134,7 +134,7 @@ class Game {
         this.level = level_inputs.filter(':checked').attr('value')
         this.deck = new Deck(Game.nCard_per_level()[this.level])      
         this.timer = new Timer
-        this.attempts = []  //List of all'attempts, an attempts being a pair of cards chosen by the player
+        this.attempts = []  //List of all attempts, an attempts being a pair of cards chosen by the player
         this.successfulAttempts = 0
     }
     
