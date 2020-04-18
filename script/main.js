@@ -93,7 +93,7 @@ class Attempt {
         this.first_rank = rank
         this.second_pos = null  //An istance of the class is initialized when the player pick the first card, thus values for the second card are null.
         this.second_rank = null
-        this.result = -1    //An attempts is successful (true) if both elements of class Card have equal rank. Default value is -1 for incomplite attempts. 
+        this.result = -1    //An attempt is successful (true) if both elements of class Card have equal rank. Default value is -1 for incomplite attempts. 
     }
 
     complete(position, rank) {
@@ -134,7 +134,7 @@ class Game {
         this.level = level_inputs.filter(':checked').attr('value')
         this.deck = new Deck(Game.nCard_per_level()[this.level])      
         this.timer = new Timer
-        this.attempts = []  //List of all attempts, an attempts being a pair of cards chosen by the player
+        this.attempts = []  //List of all attempts, an attempt being a pair of cards chosen by the player
         this.successfulAttempts = 0
     }
     
