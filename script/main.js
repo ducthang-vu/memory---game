@@ -150,13 +150,15 @@ class Game {
 
     buildBoard() {
         //Building a board, assigning classes, and printing the deck on the board.
-        var content = '<div class="board-wrapper inline-fl-w '+ Game.boardClass_per_level[this.level][0] + '">'
+        board.html('<div class="board-wrapper inline-fl-w '+ Game.boardClass_per_level[this.level][0] + '"></div>')
 
         for (let i = 0; i < Game.nCard_per_level[this.level]; i++) {
-            content += '<div class="scene ' + Game.boardClass_per_level[this.level][1] + '"><div data-position="' + i + '" class="card relative"><div class="card-face card-down absolute"></div>  <div class="card-face card-up absolute"></div></div></div>'
-        }
+            var new_scene = templ_scene.clone()
 
-        board.html(content + '</div>')
+            new_scene.addClass(Game.boardClass_per_level[this.level][1])
+            new_scene.children('.card').attr( "data-position", i)
+            new_scene.appendTo(board.children('.board-wrapper'))
+        }
 
         this.deck.printDeck($('.card-up'), $('.card-down'))
 
@@ -291,6 +293,7 @@ const level_inputs = $('input[name="level"]')
 const mess_box = $('#text-admin')
 const play_button = $('#play-button')
 const rules_box = $('#rules')
+const templ_scene = $('.template .scene')
 const time_display = $('#time')
 const volume_button = $('#volume-button')
 
