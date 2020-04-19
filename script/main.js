@@ -153,7 +153,7 @@ class Game {
         var content = '<div class="board-wrapper inline-fl-w '+ Game.boardClass_per_level[this.level][0] + '">'
 
         for (let i = 0; i < Game.nCard_per_level[this.level]; i++) {
-            content += '<div class="scene ' + Game.boardClass_per_level[this.level][1] + '"><div position="' + i + '" class="card relative"><div class="card-face card-down absolute"></div>  <div class="card-face card-up absolute"></div></div></div>'
+            content += '<div class="scene ' + Game.boardClass_per_level[this.level][1] + '"><div data-position="' + i + '" class="card relative"><div class="card-face card-down absolute"></div>  <div class="card-face card-up absolute"></div></div></div>'
         }
 
         board.html(content + '</div>')
@@ -169,8 +169,8 @@ class Game {
 
     removeCards() {
         //Removes cards from the board chosen in last attempt (two tries); should be used after a successful attempt.
-        $('.card[position="' + self.attempts[self.attempts.length-1].first_pos + '"]').slideUp() 
-        $('.card[position="' + self.attempts[self.attempts.length-1].second_pos + '"]').slideUp() 
+        $('.card[data-position="' + self.attempts[self.attempts.length-1].first_pos + '"]').slideUp() 
+        $('.card[data-position="' + self.attempts[self.attempts.length-1].second_pos + '"]').slideUp() 
         self.successfulAttempts++
     }
 
@@ -204,8 +204,8 @@ class Game {
                     }
                 }
 
-                $('.card[position="' + self.attempts.slice(-1)[0].first_pos + '"]').toggleClass('flipped')
-                $('.card[position="' + self.attempts.slice(-1)[0].second_pos + '"]').toggleClass('flipped')
+                $('.card[data-position="' + self.attempts.slice(-1)[0].first_pos + '"]').toggleClass('flipped')
+                $('.card[data-position="' + self.attempts.slice(-1)[0].second_pos + '"]').toggleClass('flipped')
                 $('.card').parent().toggleClass('layer')    //The board is reactivated
                 }, 
                 1000
@@ -219,7 +219,7 @@ class Game {
         var pendingAttempt = false  //An attempt is made of two tries, and is pending after the first try and completed after the second
     
         $('.card').click(function() {
-            var position = $(this).attr('position')
+            var position = $(this).attr('data-position')
             var rank = self.deck.cards[position].rank
     
             $(this).toggleClass('flipped')
