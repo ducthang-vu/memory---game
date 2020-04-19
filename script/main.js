@@ -105,22 +105,22 @@ class Attempt {
 
 
 class Game {
-    static nCard_per_level() {return [null, 16, 32, 48, 64]}
+    static nCard_per_level = [null, 16, 32, 48, 64]
 
-    static boardClass_per_level()  {return [
+    static boardClass_per_level = [
         null, 
         ['board_size1', 'scene_size1'], 
         ['board_size2', 'scene_size2'], 
         ['board_size3', 'scene_size3'], 
-        ['board_size1', 'scene_size4']]
-    }
+        ['board_size1', 'scene_size4']
+    ]
 
-    static messages() {return {
+    static messages = {
         'start': 'Game started!<br><br>Choose a card to start the clock.',
         'invitesComplete': 'Pick another card.',
         'successAttempt': 'Great!',
         'failedAttempt': 'Wrong! Try again!',
-        'victory': 'Congratulations, you win!'}
+        'victory': 'Congratulations, you win!'
     }
 
     static sound() {return {
@@ -132,7 +132,7 @@ class Game {
     constructor() {
         self = this
         this.level = level_inputs.filter(':checked').attr('value')
-        this.deck = new Deck(Game.nCard_per_level()[this.level])      
+        this.deck = new Deck(Game.nCard_per_level[this.level])      
         this.timer = new Timer
         this.attempts = []  //List of all attempts, an attempt being a pair of cards chosen by the player
         this.successfulAttempts = 0
@@ -150,10 +150,10 @@ class Game {
 
     buildBoard() {
         //Building a board, assigning classes, and printing the deck on the board.
-        var content = '<div class="board-wrapper inline-fl-w '+ Game.boardClass_per_level()[this.level][0] + '">'
+        var content = '<div class="board-wrapper inline-fl-w '+ Game.boardClass_per_level[this.level][0] + '">'
 
-        for (let i = 0; i < Game.nCard_per_level()[this.level]; i++) {
-            content += '<div class="scene ' + Game.boardClass_per_level()[this.level][1] + '"><div position="' + i + '" class="card relative"><div class="card-face card-down absolute"></div>  <div class="card-face card-up absolute"></div></div></div>'
+        for (let i = 0; i < Game.nCard_per_level[this.level]; i++) {
+            content += '<div class="scene ' + Game.boardClass_per_level[this.level][1] + '"><div position="' + i + '" class="card relative"><div class="card-face card-down absolute"></div>  <div class="card-face card-up absolute"></div></div></div>'
         }
 
         board.html(content + '</div>')
@@ -164,7 +164,7 @@ class Game {
     }
 
     messageUser(kind) {
-        mess_box.html(Game.messages()[kind])
+        mess_box.html(Game.messages[kind])
     }
 
     removeCards() {
@@ -197,7 +197,7 @@ class Game {
                     self.removeCards() //If attempts successful the two cards are removed from the game
                     self.triggerAudio('successAttempt')
 
-                    if (2 * self.successfulAttempts == Game.nCard_per_level()[self.level]) {    //Player has cleared the board
+                    if (2 * self.successfulAttempts == Game.nCard_per_level[self.level]) {    //Player has cleared the board
                         self.timer.stopPrintTime()
                         self.messageUser('victory')
                         self.triggerAudio('victory')
