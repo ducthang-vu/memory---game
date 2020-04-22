@@ -56,33 +56,21 @@ function shuffle(array) {
 }
 
 
-/** CLASSES and FUNCTIONS **/
-class Card {
-    constructor(value, back='?') {
-        this.rank = value;
-        this.back = back;
-    }
-
-    printFace(n) {
-        return n ? '<span>' + this.rank + '</span>' : '<span>' + this.back + '</span>'
-    }
-}
-
+/** CLASSES **/
 
 class Deck {
     // A deck of n/2 pairs of cards of same rank; each pair having a different and random rank from 10 to 99, both included.
     constructor(n) {
         this.cards = []
         for (let number of randomNumberSet(n/2, 10, 100)) {
-            this.cards.push(new Card(number), new Card(number))
+            this.cards.push(number, number)
         }
         shuffle(this.cards)
     }
 
-    printDeck($el_front, $el_back) {
-        for (let i = 0; i < this.cards.length; i ++) {
-            $el_front[i].innerHTML = this.cards[i].printFace(1) 
-            $el_back[i].innerHTML = this.cards[i].printFace(0)  
+    printDeck($el_front) {
+        for (const [index, card] of this.cards.entries()) {
+            $el_front[index].innerHTML = card
         }
     }
 }
@@ -115,7 +103,7 @@ class Timer {
 
 
 class Attempt {
-    //An attempt is made of two tries, i.e. by two elements of class Card chosen by the player; is successful if cards' ranks are equal.
+    //An attempt is made of two tries; is successful if cards' ranks are equal.
     constructor(position, rank) {
         this.first_pos = position
         this.first_rank = rank
@@ -156,7 +144,7 @@ class Game {
         this.level = level_inputs.filter(':checked').attr('value')
         this.deck = new Deck(Game.nCard_per_level[this.level])      
         this.timer = new Timer
-        this.attempts = []  //List of all attempts, an attempt being a pair of cards chosen by the player
+        this.attempts = []  //List of all attempts
         this.successfulAttempts = 0
     }
     
@@ -182,7 +170,7 @@ class Game {
             new_scene.appendTo(board.children('.board-wrapper'))
         }
 
-        this.deck.printDeck($('.card-up'), $('.card-down'))
+        this.deck.printDeck($('.card-up'))
 
         board.slideDown('slow')
     }
@@ -201,14 +189,14 @@ class Game {
     mainPhase() {
         /* MAIN PHASE FUNCTIONs */
         function newAttempt(position, rank) {
-            //The player has started a new attempt, by picking the first card (first try)
+            //The player stars a new attempt, having picked the first card 
             self.attempts.push(new Attempt(position, rank))
             self.messageUser('invitesComplete')
         }
 
 
         function completeAttempt(position, rank) {
-            // The player is compliting a pending attempt, by picking the second card (second try)
+            // The player is compliting a pending attempt, haing picked the second card 
             {try {self.attempts[self.attempts.length-1].complete(position, rank)} catch {}} 
             $('.card').parent().not('.layer').toggleClass('layer')  //Blocks every card for animation
 
@@ -240,7 +228,7 @@ class Game {
     
         $('.card').click(function() {
             var position = $(this).attr('data-position')
-            var rank = self.deck.cards[position].rank
+            var rank = self.deck.cards[position]
     
             $(this).toggleClass('flipped')
             $(this).parent().toggleClass('layer') //Blocks card from being clicked again in the next try
