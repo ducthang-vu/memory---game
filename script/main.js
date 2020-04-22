@@ -115,13 +115,13 @@ class Timer {
 
 
 class Attempt {
-    //An attempt is made of two tries, i.e. by two elements of class Card chosen by the player. 
+    //An attempt is made of two tries, i.e. by two elements of class Card chosen by the player; is successful if cards' ranks are equal.
     constructor(position, rank) {
         this.first_pos = position
         this.first_rank = rank
-        this.second_pos = null  //An istance of the class is initialized when the player pick the first card, thus values for the second card are null.
+        this.second_pos = null  //An istance of the class is initialized when the player pick the first card.
         this.second_rank = null
-        this.result = -1    //An attempt is successful (true) if both elements of class Card have equal rank. Default value is -1 for incomplite attempts. 
+        this.result = -1    //Default value is -1 for incomplite attempts, otherwise a boolean.
     }
 
     complete(position, rank) {
@@ -295,7 +295,6 @@ function switchVolume() {
 /***************************************/
 /********* --- MAIN SCRITP --- *********/
 /***************************************/
-
 
 /* EVENTS */
 volume_button.click(switchVolume)
