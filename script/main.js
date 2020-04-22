@@ -18,6 +18,7 @@ const level_inputs = $('input[name="level"]')
 const mess_box = $('#text-admin')
 const play_button = $('#play-button')
 const rules_box = $('#rules')
+const temp_board = $('.template .board-wrapper')
 const templ_scene = $('.template .scene')
 const time_display = $('#time')
 const volume_button = $('#volume-button')
@@ -35,7 +36,7 @@ function randomNumberSet(n, min, max) {
     //Accepts integers n, min, max; and returns a set of different n integers, between min, included, and max, excluded. 
     var randomNumbers = new Set()
 
-    if (isNaN(n) || isNaN(max) || isNaN(min) || n < min || min <  max) throw 'Parameters are invalid'
+    if (isNaN(n) || isNaN(max) || isNaN(min) || min >  max || n > (max - min)) throw 'Parameters are invalid'
 
     while (randomNumbers.size < n) randomNumbers.add(Math.floor(Math.random() * (max - min)) + min)
     
@@ -171,7 +172,7 @@ class Game {
 
     buildBoard() {
         //Building a board, assigning classes, and printing the deck on the board.
-        board.html('<div class="board-wrapper inline-fl-w '+ Game.boardClass_per_level[this.level][0] + '"></div>')
+        board.html(temp_board.clone().addClass(Game.boardClass_per_level[this.level][0]))
 
         for (let i = 0; i < Game.nCard_per_level[this.level]; i++) {
             var new_scene = templ_scene.clone()
