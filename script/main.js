@@ -144,11 +144,19 @@ class Game {
         this.successfulAttempts = 0
     }
     
+    messageUser(kind) {
+        mess_box.html(Game.messages[kind])
+    }
+
+    triggerAudio($el){
+        if (activeAudio) $el.play()
+    }
+
     activateTimer() {
         board.children().click(() => {
             self.timer.start()
             self.timer.printTime(time_display) 
-            this.triggerAudio(audioBleep)
+            self.triggerAudio(audioBleep)
             board.children().unbind('click')   //Timer starts only once
             }
         )
@@ -169,14 +177,6 @@ class Game {
         this.deck.printDeck($('.card-up'))
 
         board.slideDown('slow')
-    }
-
-    messageUser(kind) {
-        mess_box.html(Game.messages[kind])
-    }
-
-    triggerAudio($el){
-        if (activeAudio) $el.play()
     }
 
     removeCards() {
@@ -206,12 +206,12 @@ class Game {
                 if (self.attempts.slice(-1)[0].result) { 
                     self.removeCards()
                     self.successfulAttempts++
-                    triggerAudio(audioSuccess)
-                    
+                    self.triggerAudio(audioSuccess)
+
                     if (2 * self.successfulAttempts == Game.nCard_per_level[self.level]) {    //Player has cleared the board
                         self.timer.stopPrintTime()
                         self.messageUser('victory')
-                        triggerAudio(audioVictory) 
+                        self.triggerAudio(audioVictory) 
                     }
                 }
 
