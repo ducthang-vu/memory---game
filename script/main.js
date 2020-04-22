@@ -193,7 +193,7 @@ class Game {
 
         function completeAttempt(position, rank) {
             // The player is compliting a pending attempt, haing picked the second card 
-            {try {self.attempts[self.attempts.length-1].complete(position, rank)} catch {}} 
+            try {self.attempts.slice(-1)[0].complete(position, rank)} catch {} 
             $('.card').parent().not('.layer').toggleClass('layer')  //Blocks every card for animation
 
             setTimeout(()=> {
