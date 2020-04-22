@@ -267,7 +267,6 @@ function resetAll() {
     // Resets clock and messages boxes; should be used when player starts a new game.
     try {
         game.timer.stopPrintTime()
-        attempts.list = []
     } catch {}
 
     attempts_display.html('0')
