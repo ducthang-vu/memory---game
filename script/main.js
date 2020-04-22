@@ -158,7 +158,7 @@ class Game {
         //Building a board, assigning classes, and printing the deck on the board.
         board.html(temp_board.clone().addClass(Game.boardClass_per_level[this.level][0]))
 
-        for (let i = 0; i < Game.nCard_per_level[this.level]; i++) {
+        for (let i = 0; i < this.deck.cards.length; i++) {
             var new_scene = templ_scene.clone()
 
             new_scene.addClass(Game.boardClass_per_level[this.level][1])
