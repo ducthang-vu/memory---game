@@ -2,6 +2,33 @@ console.log('main.js is working')
 console.log($)
 
 
+/*******************************************/
+/********* --- GLOBAL VARIABLE --- *********/
+/*******************************************/
+const attempts_display = $('#attempts')
+const audioBleep = document.getElementById('audio-bleep')
+const audioSuccess = document.getElementById('audio-success')
+const audioVictory = document.getElementById('audio-victory')
+const board = $('#board')
+const icon_switch = $('#icon-switch')
+const icon_volume = $('#icon-volume')
+const info_button = $('#info-button')
+const level_display = $('#level')
+const level_inputs = $('input[name="level"]')
+const mess_box = $('#text-admin')
+const play_button = $('#play-button')
+const rules_box = $('#rules')
+const templ_scene = $('.template .scene')
+const time_display = $('#time')
+const volume_button = $('#volume-button')
+
+var activeAudio = true
+
+
+/***********************************************/
+/********* --- CLASSES & FUNCTIONS --- *********/
+/***********************************************/
+
 /** UTILITY FUNCTIONS **/
 
 function randomNumberSet(n, min, max) {
@@ -28,7 +55,7 @@ function shuffle(array) {
 }
 
 
-/**  CLASSES and FUNCTIONS**/
+/** CLASSES and FUNCTIONS **/
 class Card {
     constructor(value, back='?') {
         this.rank = value;
@@ -123,12 +150,6 @@ class Game {
         'victory': 'Congratulations, you win!'
     }
 
-    static sound() {return {
-        'bleep': audioBleep,
-        'successAttempt': audioSuccess,
-        'victory': audioVictory,}
-    }
-
     constructor() {
         self = this
         this.level = level_inputs.filter(':checked').attr('value')
@@ -142,7 +163,7 @@ class Game {
         board.children().click(() => {
             self.timer.start()
             self.timer.printTime(time_display) 
-            self.triggerAudio('bleep')
+            audioBleep.play()
             board.children().unbind('click')   //Timer starts only once
             }
         )
@@ -176,10 +197,6 @@ class Game {
         self.successfulAttempts++
     }
 
-    triggerAudio(kind){
-        if (activeAudio) Game.sound()[kind].play()
-    }
-
     mainPhase() {
         /* MAIN PHASE FUNCTIONs */
         function newAttempt(position, rank) {
@@ -197,12 +214,12 @@ class Game {
             setTimeout(()=> {
                 if (self.attempts.slice(-1)[0].result) { 
                     self.removeCards() //If attempts successful the two cards are removed from the game
-                    self.triggerAudio('successAttempt')
-
+                    audioSuccess.play()
+                    
                     if (2 * self.successfulAttempts == Game.nCard_per_level[self.level]) {    //Player has cleared the board
                         self.timer.stopPrintTime()
                         self.messageUser('victory')
-                        self.triggerAudio('victory')
+                        audioVictory.play()
                     }
                 }
 
@@ -236,7 +253,7 @@ class Game {
 
     start() {
         this.messageUser('start')
-        this.triggerAudio('bleep')
+        audioBleep.play()
         level_display.html(this.level)
         this.buildBoard()
         this.activateTimer()
@@ -278,26 +295,6 @@ function switchVolume() {
 /***************************************/
 /********* --- MAIN SCRITP --- *********/
 /***************************************/
-
-/* GLOBAL VARIABLE */
-const attempts_display = $('#attempts')
-const audioBleep = document.getElementById('audio-bleep')
-const audioSuccess = document.getElementById('audio-success')
-const audioVictory = document.getElementById('audio-victory')
-const board = $('#board')
-const icon_switch = $('#icon-switch')
-const icon_volume = $('#icon-volume')
-const info_button = $('#info-button')
-const level_display = $('#level')
-const level_inputs = $('input[name="level"]')
-const mess_box = $('#text-admin')
-const play_button = $('#play-button')
-const rules_box = $('#rules')
-const templ_scene = $('.template .scene')
-const time_display = $('#time')
-const volume_button = $('#volume-button')
-
-var activeAudio = true
 
 
 /* EVENTS */
