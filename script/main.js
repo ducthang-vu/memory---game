@@ -177,8 +177,8 @@ class Game {
 
     removeCards() {
         //Removes cards from the board chosen in last attempt (two tries).
-        $('.card[data-position="' + self.attempts[self.attempts.length-1].first_pos + '"]').slideUp() 
-        $('.card[data-position="' + self.attempts[self.attempts.length-1].second_pos + '"]').slideUp() 
+        $('.card[data-position="' + self.attempts.slice(-1)[0].first_pos + '"]').slideUp() 
+        $('.card[data-position="' + self.attempts.slice(-1)[0].second_pos + '"]').slideUp() 
     }
 
     mainPhase() {
@@ -197,7 +197,7 @@ class Game {
 
             setTimeout(()=> {
                 if (self.attempts.slice(-1)[0].result) { 
-                    self.removeCards() //If attempts successful the two cards are removed from the game
+                    self.removeCards()
                     self.successfulAttempts++
                     audioSuccess.play()
 
