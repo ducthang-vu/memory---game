@@ -35,7 +35,7 @@ function randomNumberSet(n, min, max) {
     //Accepts integers n, min, max; and returns a set of different n integers, between min, included, and max, excluded. 
     var randomNumbers = new Set()
 
-    if (isNaN(n) || n < 1 || isNaN(max) || isNaN(min)) {return -1}  // Validation
+    if (isNaN(n) || isNaN(max) || isNaN(min) || n < min || min <  max) throw 'Parameters are invalid'
 
     while (randomNumbers.size < n) randomNumbers.add(Math.floor(Math.random() * (max - min)) + min)
     
@@ -215,7 +215,7 @@ class Game {
                 if (self.attempts.slice(-1)[0].result) { 
                     self.removeCards() //If attempts successful the two cards are removed from the game
                     audioSuccess.play()
-                    
+
                     if (2 * self.successfulAttempts == Game.nCard_per_level[self.level]) {    //Player has cleared the board
                         self.timer.stopPrintTime()
                         self.messageUser('victory')
