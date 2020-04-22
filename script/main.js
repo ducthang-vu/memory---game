@@ -86,13 +86,9 @@ class Timer {
         this.startTime = performance.now()
     }
 
-    elapsed() {
-        return performance.now() - this.startTime
-    }
-
     printTime($el) {
         this.count = setInterval(() => {
-            $el.html(Math.round(this.elapsed() / 1000))
+            $el.html(Math.round((performance.now() - this.startTime) / 1000))
         }, 1000);
     }
 
