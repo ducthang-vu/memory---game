@@ -148,7 +148,7 @@ class Game {
         board.children().click(() => {
             self.timer.start()
             self.timer.printTime(time_display) 
-            audioBleep.play()
+            this.triggerAudio(audioBleep)
             board.children().unbind('click')   //Timer starts only once
             }
         )
@@ -175,6 +175,10 @@ class Game {
         mess_box.html(Game.messages[kind])
     }
 
+    triggerAudio($el){
+        if (activeAudio) $el.play()
+    }
+
     removeCards() {
         //Removes cards from the board chosen in last attempt (two tries).
         $('.card[data-position="' + self.attempts.slice(-1)[0].first_pos + '"]').slideUp() 
@@ -192,19 +196,22 @@ class Game {
 
         function completeAttempt(position, rank) {
             // The player is compliting a pending attempt, haing picked the second card 
-            try {self.attempts.slice(-1)[0].complete(position, rank)} catch {} 
+            try {
+                self.attempts.slice(-1)[0].complete(position, rank)
+            } catch {} 
+            
             $('.card').parent().not('.layer').toggleClass('layer')  //Blocks every card for animation
 
             setTimeout(()=> {
                 if (self.attempts.slice(-1)[0].result) { 
                     self.removeCards()
                     self.successfulAttempts++
-                    audioSuccess.play()
-
+                    triggerAudio(audioSuccess)
+                    
                     if (2 * self.successfulAttempts == Game.nCard_per_level[self.level]) {    //Player has cleared the board
                         self.timer.stopPrintTime()
                         self.messageUser('victory')
-                        audioVictory.play()
+                        triggerAudio(audioVictory) 
                     }
                 }
 
@@ -238,7 +245,7 @@ class Game {
 
     start() {
         this.messageUser('start')
-        audioBleep.play()
+        this.triggerAudio(audioBleep)
         level_display.html(this.level)
         this.buildBoard()
         this.activateTimer()
