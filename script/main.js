@@ -236,7 +236,7 @@ class Game {
 
 
         /* MAIN PHASE SCRIPT */
-        var pendingAttempt = false  //An attempt is made of two tries, and is pending after the first try and completed after the second
+        var pendingAttempt = false  //An attempt is pending after the first try and completed after the second.
     
         $('.card').click(function() {
             var position = $(this).attr('data-position')
