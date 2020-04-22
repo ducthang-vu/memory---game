@@ -192,7 +192,7 @@ class Game {
     }
 
     removeCards() {
-        //Removes cards from the board chosen in last attempt (two tries); should be used after a successful attempt.
+        //Removes cards from the board chosen in last attempt (two tries).
         $('.card[data-position="' + self.attempts[self.attempts.length-1].first_pos + '"]').slideUp() 
         $('.card[data-position="' + self.attempts[self.attempts.length-1].second_pos + '"]').slideUp() 
         self.successfulAttempts++
@@ -264,7 +264,7 @@ class Game {
 
 
 function resetAll() {
-    // Resets clock and messages boxes; should be used when player starts a new game.
+    // Resets clock and messages boxes.
     try {
         game.timer.stopPrintTime()
     } catch {}
