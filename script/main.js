@@ -23,8 +23,6 @@ const templ_scene = $('.template .scene')
 const time_display = $('#time')
 const volume_button = $('#volume-button')
 
-var activeAudio = true
-
 
 /***********************************************/
 /********* --- CLASSES & FUNCTIONS --- *********/
@@ -148,15 +146,11 @@ class Game {
         mess_box.html(Game.messages[kind])
     }
 
-    triggerAudio($el){
-        if (activeAudio) $el.play()
-    }
-
     activateTimer() {
         board.children().click(() => {
             self.timer.start()
             self.timer.printTime(time_display) 
-            self.triggerAudio(audioBleep)
+            audioBleep.play()
             board.children().unbind('click')   //Timer starts only once
             }
         )
@@ -206,12 +200,12 @@ class Game {
                 if (self.attempts.slice(-1)[0].result) { 
                     self.removeCards()
                     self.successfulAttempts++
-                    self.triggerAudio(audioSuccess)
+                    audioSuccess.play()
 
                     if (2 * self.successfulAttempts == Game.nCard_per_level[self.level]) {    //Player has cleared the board
                         self.timer.stopPrintTime()
                         self.messageUser('victory')
-                        self.triggerAudio(audioVictory) 
+                        audioVictory.play()
                     }
                 }
 
@@ -245,7 +239,7 @@ class Game {
 
     start() {
         this.messageUser('start')
-        this.triggerAudio(audioBleep)
+        audioBleep.play()
         level_display.html(this.level)
         this.buildBoard()
         this.activateTimer()
@@ -275,12 +269,12 @@ function showInfo() {
 
 
 function switchVolume() {
-    activeAudio = !activeAudio
+    Array.from($('audio')).forEach(audio => audio.muted = !audio.muted)
+    
     icon_volume.toggleClass('fa-volume-up fa-volume-mute')
     icon_switch.toggleClass('fa-toggle-on fa-toggle-off')
     icon_switch.toggleClass('darkgreen-color darkred-color')
 }
-
 
 
 /***************************************/
