@@ -12,16 +12,13 @@ const audioVictory = document.getElementById('audio-victory')
 const board = $('#board')
 const icon_switch = $('#icon-switch')
 const icon_volume = $('#icon-volume')
-const info_button = $('#info-button')
 const level_display = $('#level')
 const level_inputs = $('input[name="level"]')
 const mess_box = $('#text-admin')
-const play_button = $('#play-button')
 const rules_box = $('#rules')
 const temp_board = $('.template .board-wrapper')
 const templ_scene = $('.template .scene')
 const time_display = $('#time')
-const volume_button = $('#volume-button')
 
 
 /***********************************************/
@@ -32,7 +29,7 @@ const volume_button = $('#volume-button')
 
 function randomNumberSet(n, min, max) {
     //Accepts integers n, min, max; and returns a set of different n integers, between min, included, and max, excluded. 
-    var randomNumbers = new Set()
+    let randomNumbers = new Set()
 
     if (isNaN(n) || isNaN(max) || isNaN(min) || min >  max || n > (max - min)) throw 'Parameters are invalid'
 
@@ -44,7 +41,7 @@ function randomNumberSet(n, min, max) {
 
 function shuffle(array) {
     //Shuffling randomly array item's positions
-    var m = array.length, t, i;
+    let m = array.length, t, i;
     while (m) { 
         i = Math.floor(Math.random() * m--) 
         t = array[m]; 
@@ -161,7 +158,7 @@ class Game {
         board.html(temp_board.clone().addClass(Game.boardClass_per_level[this.level][0]))
 
         for (let i = 0; i < this.deck.cards.length; i++) {
-            var new_scene = templ_scene.clone()
+            let new_scene = templ_scene.clone()
 
             new_scene.addClass(Game.boardClass_per_level[this.level][1])
             new_scene.children('.card').attr( "data-position", i)
@@ -224,8 +221,8 @@ class Game {
         var pendingAttempt = false  //An attempt is pending after the first try and completed after the second.
     
         $('.card').click(function() {
-            var position = $(this).attr('data-position')
-            var rank = self.deck.cards[position]
+            let position = $(this).attr('data-position')
+            let rank = self.deck.cards[position]
     
             $(this).toggleClass('flipped')
             $(this).parent().toggleClass('layer') //Blocks card from being clicked again in the next try
@@ -263,8 +260,8 @@ function resetAll() {
 
 function showInfo() {
     rules_box.toggle()
-    info_button.toggleClass('darkred-color')
-    info_button.children().toggleClass('fa-question-circle fa-window-close')
+    $('#info-button').toggleClass('darkred-color')
+    $('#info-button').children().toggleClass('fa-question-circle fa-window-close')
 } 
 
 
@@ -282,10 +279,10 @@ function switchVolume() {
 /***************************************/
 
 /* EVENTS */
-volume_button.click(switchVolume)
-info_button.click(showInfo)
+$('#volume-button').click(switchVolume)
+$('#info-button').click(showInfo)
 
-play_button.click(() => {
+$('#play-button').click(() => {
     resetAll()
     game = new Game
     game.start()
